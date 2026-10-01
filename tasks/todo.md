@@ -17,8 +17,8 @@
 - [x] PaymentStream.sol
 - [x] tests: 43 pass (mandate 14, policy 17, stream 12 incl fuzz)
 - [x] Deploy.s.sol writes deployments/<chainId>.json
-- [ ] deploy to Monad testnet (BLOCKED: need deployer MON — see questions)
-- [ ] verify via sourcify
+- [x] deployed to Monad testnet 2026-10-02 (deployments/10143.json)
+- [x] verify via sourcify submitted
 
 ## Phase 2/3 — policy + stream: contracts done w/ Phase 1
 

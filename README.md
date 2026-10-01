@@ -208,9 +208,11 @@ Addresses live only in `contracts/deployments/<chainId>.json` and are read throu
 
 | Network | PaymentMandate | SpendingPolicy | PaymentStream |
 |---|---|---|---|
-| Monad testnet (10143) | not yet deployed | not yet deployed | not yet deployed |
+| Monad testnet (10143) | [`0xE6f28309862E3bF2EefE76195F67399f681CC122`](https://testnet.monadvision.com/address/0xE6f28309862E3bF2EefE76195F67399f681CC122) | [`0x517243E456Cbe561EA34693f68CE58D9B71bA298`](https://testnet.monadvision.com/address/0x517243E456Cbe561EA34693f68CE58D9B71bA298) | [`0x6B361172245d72b033BD6B4328d260Ed149C246b`](https://testnet.monadvision.com/address/0x6B361172245d72b033BD6B4328d260Ed149C246b) |
 
-This table is updated from `contracts/deployments/` after deployment.
+USDC (Circle, testnet): `0x534b2f3A21130d7a60830c2Df862319e593943A3`. Deploy block 67334523, commit `6845a74`. Source: `contracts/deployments/10143.json`.
+
+Deployment transactions: PaymentMandate `0x5768ddf658be9127418b2376a5a5afbcad5eb93d43c9fed6e5e8a704f9805a3a`, SpendingPolicy `0xfeae521b3f714deff0a3772372e07f9249079575ca4f4395a440f16db9cb4dd2`, PaymentStream `0xf346687403d32972bbed6dfc2ab9612e6f09ea86d5c09e73776d8b6b2acf0a0e`.
 
 ## Hackathon integrations
 
@@ -224,4 +226,4 @@ This table is updated from `contracts/deployments/` after deployment.
 
 - Contracts, tests, deploy scripts: done.
 - Web app, intent parser, agent CLI, x402: done, verified end to end on a local anvil chain.
-- Monad testnet deployment: pending a funded deployer (see Deployment).
+- Monad testnet deployment: done, addresses above.

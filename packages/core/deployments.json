@@ -1,8 +1,17 @@
 {
+  "10143": {
+    "chainId": 10143,
+    "deployBlock": 67334523,
+    "deployedAt": 1790881042,
+    "paymentMandate": "0xE6f28309862E3bF2EefE76195F67399f681CC122",
+    "paymentStream": "0x6B361172245d72b033BD6B4328d260Ed149C246b",
+    "spendingPolicy": "0x517243E456Cbe561EA34693f68CE58D9B71bA298",
+    "usdc": "0x534b2f3A21130d7a60830c2Df862319e593943A3"
+  },
   "31337": {
     "chainId": 31337,
     "deployBlock": 0,
-    "deployedAt": 1790879782,
+    "deployedAt": 1790880635,
     "paymentMandate": "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
     "paymentStream": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9",
     "spendingPolicy": "0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9",
