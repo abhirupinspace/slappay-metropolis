@@ -1,0 +1,13 @@
+{
+  "name": "slappay",
+  "private": true,
+  "packageManager": "pnpm@10.10.0",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "abis": "pnpm --filter @slappay/core abis",
+    "contracts:test": "cd contracts && forge test",
+    "contracts:deploy:testnet": "cd contracts && forge script script/Deploy.s.sol --rpc-url monad_testnet --broadcast -vvv"
+  }
+}
