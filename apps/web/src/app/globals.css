@@ -142,3 +142,8 @@
     @apply font-sans;
   }
 }
+/* Page background is the primary brand color. */
+html,
+body {
+  background: #fbfff8;
+}
