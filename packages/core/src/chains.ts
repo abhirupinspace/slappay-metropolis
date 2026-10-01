@@ -1,5 +1,5 @@
 import { defineChain } from "viem";
-import { monad, monadTestnet as viemMonadTestnet } from "viem/chains";
+import { foundry, monad, monadTestnet as viemMonadTestnet } from "viem/chains";
 
 /** viem's monadTestnet points at a stale explorer; override with MonadVision. */
 export const monadTestnet = defineChain({
@@ -16,9 +16,16 @@ export const monadMainnet = defineChain({
   },
 });
 
+/** Local anvil for development only. */
+export const anvil = defineChain({
+  ...foundry,
+  blockExplorers: { default: { name: "local", url: "http://localhost:8545" } },
+});
+
 export const SUPPORTED_CHAINS = {
   [monadTestnet.id]: monadTestnet,
   [monadMainnet.id]: monadMainnet,
+  [anvil.id]: anvil,
 } as const;
 
 export type SupportedChainId = keyof typeof SUPPORTED_CHAINS;

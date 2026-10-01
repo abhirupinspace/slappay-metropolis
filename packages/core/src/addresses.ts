@@ -6,6 +6,11 @@ export const USDC_ADDRESSES: Record<number, Address> = {
   143: "0x754704Bc059F8C67012fEd69BC8A327a5aafb603",
 };
 
+/** USDC for a chain: Circle's on Monad, the deployed mock on anvil. */
+export function usdcFor(chainId: number): Address {
+  return USDC_ADDRESSES[chainId] ?? getDeployment(chainId).usdc;
+}
+
 export const USDC_DECIMALS = 6;
 
 export interface Deployment {

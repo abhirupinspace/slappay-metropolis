@@ -22,26 +22,29 @@
 
 ## Phase 2/3 — policy + stream: contracts done w/ Phase 1
 
-## Phase 4 — web + Privy
-- [ ] pnpm workspace, apps/web (create-next-app 16.3.8)
-- [ ] packages/config: chains.ts, addresses from deployments json, abis
-- [ ] Privy provider + wagmi bridge, Monad testnet
-- [ ] useTx hook: preparing/signing/submitting/confirming/confirmed, explorer link
-- [ ] USDC approve+create flows for all 3 primitives
+## Phase 4 — web + Privy  [DONE, untested in browser: no Privy app id]
+- [x] pnpm workspace, apps/web (create-next-app 16.3.8)
+- [x] packages/core: chains, addresses from deployments json, abis
+- [x] Privy provider + wagmi bridge
+- [x] useTx hook w/ states + explorer link; simulate before sign
+- [x] approve+create flows for all 3 primitives
 
-## Phase 5 — intent parser
-- [ ] lib/intent/schema.ts (zod), parser.ts (LLM), fallback.ts (regex), validator.ts
-- [ ] /api/intent route; preview page w/ confirm
+## Phase 5 — intent parser  [DONE]
+- [x] schema (zod), parser (claude-opus-5-5 structured output), fallback (regex, all demo phrases pass), validator
+- [x] /api/intent; preview + confirm in IntentFlow
 
-## Phase 6 — x402
-- [ ] /api/paid/* route returns 402 w/ x402 v2 header
-- [ ] agent script: fetch → 402 → policy.spend → retry w/ proof → 200
-- [ ] server verifies AgentSpent onchain
+## Phase 6 — x402  [DONE, local e2e verified]
+- [x] /api/paid/weather 402 w/ x402 v2 headers, slappay-policy scheme
+- [x] agent CLI: keygen/status/pay/fetch; replay rejected; reverts decoded
 
-## Phase 7 — indexing (Envio) — optional, after core works
-## Phase 8 — UI pages: home, preview, dashboard, mandates, agents, streams
-## Phase 9 — e2e on testnet, demo script
-## Phase 10 — README, polish
+## Phase 7 — Envio: not started (optional)
+## Phase 8 — UI pages  [DONE: home, dashboard, mandates, agents, streams]
+## Phase 9 — e2e: local anvil DONE (scripts/local-e2e.sh). Testnet BLOCKED on MON.
+## Phase 10 — README DONE (addresses table pending deploy)
+
+## Review
+- 43 forge tests pass; pnpm -r typecheck + lint clean; local-e2e.sh passes (402→pay→200, replay→402, over-limit + bad recipient revert).
+- Not verified: Privy login in browser (needs app id), LLM parse path (needs key), testnet txs (needs MON).
 
 ## Unresolved questions
 1. Deployer: I generated a key in contracts/.env (gitignored). Fund addr w/ MON from https://faucet.monad.xyz (need >=10 MON reserve + gas). Or give me own key?
