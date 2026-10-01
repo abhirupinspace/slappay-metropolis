@@ -1,24 +1,32 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { useAccount } from "wagmi";
 import { formatUsdc } from "@slappay/core";
+import { ArrowUp, Bot, Clock, ExternalLink, Lock, Send, Sparkles, Waves } from "lucide-react";
 import { buildSteps, spendTarget } from "@/lib/actions";
-import { config } from "@/lib/config";
 import { short, ts } from "@/lib/format";
 import { useTx } from "@/lib/hooks/useTx";
 import { useUsdcAllowance, useUsdcBalance } from "@/lib/hooks/useUsdc";
 import type { Intent, ParseResult } from "@/lib/intent/schema";
 import { resolveIntent, unresolvedNames, type ResolvedIntent } from "@/lib/intent/validator";
-import { Button, Card, Row, TxStatus } from "./primitives";
+import { ease } from "./motion";
+import { PrimaryButton, SuccessMark, TxProgress, inputCls } from "./modals/parts";
 
 const EXAMPLES = [
-  "Pay Alex $5 when he finishes the website",
-  "Give my research agent $20 per day, max $2 per transaction",
-  "Pay Sarah $20/hour until $100",
-  "Pay Bob $10 after 2 days",
-  "Send Dana $1 for coffee",
+  { icon: Lock, label: "Escrow until approved", text: "Pay Alex $5 when he finishes the website" },
+  { icon: Bot, label: "Budget for an agent", text: "Give my research agent $20 per day, max $2 per transaction" },
+  { icon: Waves, label: "Stream by the hour", text: "Pay Sarah $20/hour until $100" },
+  { icon: Clock, label: "Release on a date", text: "Pay Bob $10 after 2 days" },
 ];
+
+const TYPE_META: Record<Intent["type"], { label: string; icon: typeof Lock }> = {
+  simple_payment: { label: "Instant payment", icon: Send },
+  conditional_payment: { label: "Conditional payment", icon: Lock },
+  agent_policy: { label: "Agent spending policy", icon: Bot },
+  payment_stream: { label: "Payment stream", icon: Waves },
+};
 
 export function IntentFlow() {
   const [text, setText] = useState("");
@@ -27,8 +35,10 @@ export function IntentFlow() {
   const [resolve, setResolve] = useState<Record<string, string>>({});
   const { address } = useAccount();
   const tx = useTx();
+  const resultRef = useRef<HTMLDivElement>(null);
 
   async function parse(t = text) {
+    if (!t.trim()) return;
     setParsing(true);
     setResult(null);
     setResolve({});
@@ -36,6 +46,7 @@ export function IntentFlow() {
     try {
       const res = await fetch("/api/intent", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ text: t }) });
       setResult(await res.json());
+      setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
     } catch (e) {
       setResult({ intent: null, note: e instanceof Error ? e.message : "parse failed" });
     } finally {
@@ -46,64 +57,127 @@ export function IntentFlow() {
   const intent = result?.intent ?? null;
   const names = useMemo(() => (intent ? unresolvedNames(intent) : []), [intent]);
   const resolution = useMemo(() => (intent ? resolveIntent(intent, resolve, address) : null), [intent, resolve, address]);
+  const done = tx.state.status === "confirmed";
 
   return (
-    <div className="space-y-4">
-      <form
-        onSubmit={(e) => { e.preventDefault(); if (text.trim()) parse(); }}
-        className="space-y-2"
+    <div className="mx-auto max-w-2xl">
+      {/* Composer */}
+      <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }} className="pt-10 text-center sm:pt-16">
+        <div className="inline-flex items-center gap-1.5 rounded-full bg-lime px-3 py-1 text-[11px] font-bold uppercase tracking-wide text-forest"><Sparkles className="size-3" /> New rule</div>
+        <h1 className="mt-4 text-4xl font-semibold tracking-[-0.03em] sm:text-5xl">What should your money do?</h1>
+        <p className="mx-auto mt-3 max-w-md text-sm text-dim">Describe it in plain English. Review exactly what will happen. Sign once. Monad enforces it.</p>
+      </motion.div>
+
+      <motion.form
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, ease, delay: 0.08 }}
+        onSubmit={(e) => { e.preventDefault(); parse(); }}
+        className="mt-8 rounded-[28px] bg-card p-3 shadow-[0_20px_60px_-30px_rgba(18,20,18,0.25)] transition focus-within:shadow-[0_24px_70px_-30px_rgba(18,20,18,0.35)]"
       >
         <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="Describe a payment…"
-          rows={2}
-          className="w-full rounded-md border border-neutral-300 p-3 text-base focus:border-black focus:outline-none"
+          onKeyDown={(e) => { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") parse(); }}
+          placeholder="Pay Alex $500 when the website is approved…"
+          rows={3}
+          className="w-full resize-none bg-transparent px-3 py-2 text-lg leading-relaxed outline-none placeholder:text-dim/60"
         />
-        <div className="flex items-center gap-2">
-          <Button type="submit" disabled={parsing || !text.trim()}>{parsing ? "Parsing…" : "Parse"}</Button>
-          <span className="text-xs text-neutral-500">Nothing moves until you confirm and sign.</span>
+        <div className="flex items-center justify-between px-2 pb-1">
+          <span className="text-[11px] text-dim">Nothing moves until you confirm and sign · ⌘↵</span>
+          <motion.button whileTap={{ scale: 0.94 }} whileHover={{ scale: 1.04 }} type="submit" disabled={parsing || !text.trim()} className="grid size-11 place-items-center rounded-full bg-forest text-white transition disabled:opacity-30" aria-label="Parse">
+            {parsing ? <motion.span animate={{ rotate: 360 }} transition={{ duration: 0.9, repeat: Infinity, ease: "linear" }} className="size-4 rounded-full border-2 border-white/30 border-t-white" /> : <ArrowUp className="size-5" />}
+          </motion.button>
         </div>
-      </form>
-      <div className="flex flex-wrap gap-2">
-        {EXAMPLES.map((ex) => (
-          <button key={ex} type="button" onClick={() => { setText(ex); parse(ex); }} className="rounded-full border border-neutral-300 bg-white px-3 py-1 text-xs hover:bg-neutral-100">
-            {ex}
-          </button>
-        ))}
-      </div>
+      </motion.form>
 
-      {result && !intent && <Card className="text-sm text-amber-800">{result.note || "Could not parse that."}</Card>}
-
-      {intent && (
-        <Card className="space-y-3">
-          <div className="flex items-center justify-between">
-            <h2 className="font-semibold">Preview</h2>
-            <span className="text-xs text-neutral-500">parsed by {result?.source ?? "?"}{result?.note ? ` · ${result.note}` : ""}</span>
-          </div>
-          <IntentSummary intent={intent} />
-          {names.length > 0 && (
-            <div className="space-y-2 border-t border-neutral-200 pt-3">
-              <p className="text-sm text-neutral-600">Who is this? Paste a wallet address for each name.</p>
-              {names.map((n) => (
-                <label key={n} className="block text-sm">
-                  <span className="font-medium">{n}</span>
-                  <input
-                    value={resolve[n] ?? ""}
-                    onChange={(e) => setResolve({ ...resolve, [n]: e.target.value.trim() })}
-                    placeholder="0x…"
-                    className="mt-1 w-full rounded-md border border-neutral-300 p-2 font-mono text-xs"
-                  />
-                </label>
-              ))}
-            </div>
-          )}
-          {resolution && !resolution.ok && (
-            <ul className="list-disc pl-5 text-sm text-red-700">{resolution.errors.map((e) => <li key={e}>{e}</li>)}</ul>
-          )}
-          {resolution?.ok && <Confirm resolved={resolution.intent} tx={tx} />}
-        </Card>
+      {/* Examples */}
+      {!result && (
+        <motion.div initial="hidden" animate="show" variants={{ show: { transition: { staggerChildren: 0.05, delayChildren: 0.2 } } }} className="mt-5 grid gap-2 sm:grid-cols-2">
+          {EXAMPLES.map((ex) => (
+            <motion.button
+              key={ex.text}
+              variants={{ hidden: { opacity: 0, y: 8 }, show: { opacity: 1, y: 0 } }}
+              whileHover={{ y: -2 }}
+              type="button"
+              onClick={() => { setText(ex.text); parse(ex.text); }}
+              className="flex items-start gap-3 rounded-2xl bg-card p-4 text-left transition hover:shadow-[0_12px_30px_-18px_rgba(18,20,18,0.3)]"
+            >
+              <span className="grid size-9 shrink-0 place-items-center rounded-full bg-canvas text-ink"><ex.icon className="size-4" /></span>
+              <span>
+                <span className="block text-xs font-semibold text-dim">{ex.label}</span>
+                <span className="mt-0.5 block text-sm font-medium">{ex.text}</span>
+              </span>
+            </motion.button>
+          ))}
+        </motion.div>
       )}
+
+      {/* Result */}
+      <div ref={resultRef} className="scroll-mt-6">
+        <AnimatePresence mode="wait">
+          {result && !intent && (
+            <motion.div key="no" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="mt-5 rounded-2xl bg-ember/10 p-4 text-sm">
+              <span className="font-semibold text-ember">Couldn&apos;t turn that into a rule.</span> <span className="text-ink">{result.note}</span>
+            </motion.div>
+          )}
+
+          {intent && (
+            <motion.div key="yes" initial={{ opacity: 0, y: 16, scale: 0.98 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.45, ease }} className="mt-5 overflow-hidden rounded-[28px] bg-card">
+              {done ? (
+                <Done intent={resolution?.ok ? resolution.intent : null} explorer={tx.explorer} onNew={() => { setResult(null); setText(""); tx.reset(); }} />
+              ) : (
+                <>
+                  <div className="flex items-center justify-between border-b border-line px-6 py-4">
+                    <div className="flex items-center gap-2.5">
+                      {(() => { const I = TYPE_META[intent.type].icon; return <span className="grid size-9 place-items-center rounded-full bg-lime text-forest"><I className="size-4" /></span>; })()}
+                      <div>
+                        <div className="text-sm font-semibold">{TYPE_META[intent.type].label}</div>
+                        <div className="text-[11px] text-dim">parsed by {result?.source === "llm" ? "Claude" : "offline parser"}</div>
+                      </div>
+                    </div>
+                    <button type="button" onClick={() => setResult(null)} className="text-xs font-semibold text-dim hover:text-ink">Edit</button>
+                  </div>
+
+                  <div className="px-6 py-5">
+                    <IntentSummary intent={intent} />
+
+                    {names.length > 0 && (
+                      <div className="mt-5 rounded-2xl bg-canvas p-4">
+                        <div className="text-xs font-semibold">Who is this?</div>
+                        <div className="mt-0.5 text-[11px] text-dim">Paste a wallet address for each name.</div>
+                        <div className="mt-3 space-y-3">
+                          {names.map((n) => (
+                            <label key={n} className="block">
+                              <span className="text-xs font-semibold text-dim">{n}</span>
+                              <input value={resolve[n] ?? ""} onChange={(e) => setResolve({ ...resolve, [n]: e.target.value.trim() })} placeholder="0x…" spellCheck={false} className={`${inputCls} bg-card font-mono text-xs`} />
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {resolution && !resolution.ok && names.every((n) => resolve[n]) && (
+                      <ul className="mt-4 list-disc pl-5 text-xs text-ember">{resolution.errors.map((e) => <li key={e}>{e}</li>)}</ul>
+                    )}
+
+                    {resolution?.ok && <Confirm resolved={resolution.intent} tx={tx} />}
+                  </div>
+                </>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </div>
+  );
+}
+
+function Line({ k, v }: { k: string; v: React.ReactNode }) {
+  return (
+    <div className="flex justify-between gap-6 py-2 text-sm">
+      <span className="text-dim">{k}</span>
+      <span className="text-right font-semibold">{v}</span>
     </div>
   );
 }
@@ -111,35 +185,32 @@ export function IntentFlow() {
 function IntentSummary({ intent }: { intent: Intent }) {
   switch (intent.type) {
     case "simple_payment":
-      return <><Row k="Type" v="Simple payment" /><Row k="To" v={intent.recipient} /><Row k="Amount" v={`${intent.amount} USDC`} /></>;
+      return <div className="divide-y divide-line"><Line k="To" v={intent.recipient} /><Line k="Amount" v={`${intent.amount} USDC`} /></div>;
     case "conditional_payment":
       return (
-        <>
-          <Row k="Type" v="Conditional payment (escrow)" />
-          <Row k="To" v={intent.recipient} />
-          <Row k="Amount" v={`${intent.amount} USDC`} />
-          <Row k="Condition" v={intent.condition.type === "manual_approval" ? `You approve: "${intent.condition.description}"` : intent.condition.type === "attestation" ? `${intent.condition.verifier} confirms: "${intent.condition.description}"` : `After ${Math.round(intent.condition.releaseAfterSeconds / 3600)}h`} />
-          <Row k="Expiry" v={`${intent.expiryDays} days`} />
-        </>
+        <div className="divide-y divide-line">
+          <Line k="To" v={intent.recipient} />
+          <Line k="Amount" v={`${intent.amount} USDC`} />
+          <Line k="Releases when" v={intent.condition.type === "manual_approval" ? `You approve: "${intent.condition.description}"` : intent.condition.type === "attestation" ? `${intent.condition.verifier} confirms: "${intent.condition.description}"` : `After ${Math.round(intent.condition.releaseAfterSeconds / 3600)} hours`} />
+          <Line k="Expires" v={`${intent.expiryDays} days`} />
+        </div>
       );
     case "agent_policy":
       return (
-        <>
-          <Row k="Type" v="Agent spending policy" />
-          <Row k="Agent" v={intent.agentName} />
-          <Row k="Daily limit" v={`${intent.dailyLimit} USDC`} />
-          <Row k="Per transaction" v={`${intent.transactionLimit} USDC`} />
-          <Row k="Recipients" v={intent.allowAnyRecipient ? "Any" : intent.allowedRecipients.join(", ") || "(none yet)"} />
-        </>
+        <div className="divide-y divide-line">
+          <Line k="Agent" v={intent.agentName} />
+          <Line k="Daily limit" v={`${intent.dailyLimit} USDC`} />
+          <Line k="Per transaction" v={`${intent.transactionLimit} USDC`} />
+          <Line k="Recipients" v={intent.allowAnyRecipient ? "Any address" : intent.allowedRecipients.join(", ") || "(none yet)"} />
+        </div>
       );
     case "payment_stream":
       return (
-        <>
-          <Row k="Type" v="Payment stream" />
-          <Row k="To" v={intent.recipient} />
-          <Row k="Rate" v={`${intent.ratePerUnit} USDC / ${intent.unit}`} />
-          <Row k="Maximum" v={`${intent.maxAmount} USDC (deposited now)`} />
-        </>
+        <div className="divide-y divide-line">
+          <Line k="To" v={intent.recipient} />
+          <Line k="Rate" v={`${intent.ratePerUnit} USDC / ${intent.unit}`} />
+          <Line k="Maximum" v={`${intent.maxAmount} USDC, deposited now`} />
+        </div>
       );
   }
 }
@@ -151,19 +222,34 @@ function Confirm({ resolved, tx }: { resolved: ResolvedIntent; tx: ReturnType<ty
   const need = target?.amount ?? (resolved.type === "simple_payment" ? resolved.amount : 0n);
   const insufficient = balance.data !== undefined && balance.data < need;
   const steps = buildSteps(resolved, allowance.data ?? 0n);
+  const s = tx.state.status;
+  const inFlight = s !== "idle" && s !== "error";
 
   return (
-    <div className="space-y-2 border-t border-neutral-200 pt-3">
-      <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">You are about to</p>
-      <ResolvedSummary r={resolved} />
-      {insufficient && <p className="text-sm text-red-700">Insufficient USDC balance. Need {formatUsdc(need)} USDC, have {formatUsdc(balance.data ?? 0n)}.</p>}
-      <div className="flex items-center gap-2">
-        <Button onClick={() => tx.run(steps, resolved.type)} disabled={tx.busy || insufficient || tx.state.status === "confirmed"}>
-          {steps.length > 1 ? "Approve & Confirm" : "Confirm & Sign"}
-        </Button>
-        {steps.length > 1 && <span className="text-xs text-neutral-500">2 signatures: USDC approval, then create</span>}
-      </div>
-      <TxStatus state={tx.state} explorer={tx.explorer} />
+    <div className="mt-5">
+      <AnimatePresence mode="wait" initial={false}>
+        {inFlight ? (
+          <motion.div key="progress" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="rounded-2xl bg-canvas p-5">
+            <div className="mb-4 text-xs font-bold uppercase tracking-wide text-forest">{steps.length > 1 ? "Two signatures: approve USDC, then create" : "One signature"}</div>
+            <TxProgress status={s as "preparing" | "signing" | "submitting" | "confirming"} />
+          </motion.div>
+        ) : (
+          <motion.div key="review" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <div className="rounded-2xl bg-mint/60 p-5">
+              <div className="text-[11px] font-bold uppercase tracking-wide text-forest">You are about to</div>
+              <div className="mt-2 divide-y divide-forest/10"><ResolvedSummary r={resolved} /></div>
+            </div>
+            {insufficient && <p className="mt-3 text-xs text-ember">Insufficient USDC. Need {formatUsdc(need)}, have {formatUsdc(balance.data ?? 0n)}.</p>}
+            {s === "error" && <p className="mt-3 text-xs text-ember">{tx.state.status === "error" ? tx.state.message : ""}</p>}
+            <div className="mt-4">
+              <PrimaryButton onClick={() => tx.run(steps, resolved.type)} disabled={insufficient}>
+                <Send className="size-4" /> {steps.length > 1 ? "Approve & confirm" : "Confirm & sign"}
+              </PrimaryButton>
+              {steps.length > 1 && <p className="mt-2 text-center text-[11px] text-dim">Two signatures: USDC approval, then the rule.</p>}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -171,35 +257,50 @@ function Confirm({ resolved, tx }: { resolved: ResolvedIntent; tx: ReturnType<ty
 function ResolvedSummary({ r }: { r: ResolvedIntent }) {
   switch (r.type) {
     case "simple_payment":
-      return <><Row k="Send" v={`${formatUsdc(r.amount)} USDC`} /><Row k="To" v={short(r.recipient)} /></>;
+      return <><Line k="Send" v={`${formatUsdc(r.amount)} USDC`} /><Line k="To" v={short(r.recipient)} /></>;
     case "conditional_payment":
       return (
         <>
-          <Row k="Lock" v={`${formatUsdc(r.amount)} USDC in PaymentMandate`} />
-          <Row k="Recipient" v={short(r.recipient)} />
-          <Row k="Releases when" v={r.conditionType === 0 ? "you approve" : r.conditionType === 1 ? `${short(r.verifier)} approves` : ts(r.releaseAfter)} />
-          <Row k="Refundable after" v={ts(r.expiry)} />
+          <Line k="Lock" v={`${formatUsdc(r.amount)} USDC in escrow`} />
+          <Line k="Recipient" v={short(r.recipient)} />
+          <Line k="Releases when" v={r.conditionType === 0 ? "you approve" : r.conditionType === 1 ? `${short(r.verifier)} approves` : ts(r.releaseAfter)} />
+          <Line k="Refundable after" v={ts(r.expiry)} />
         </>
       );
     case "agent_policy":
       return (
         <>
-          <Row k="Fund" v={`${formatUsdc(r.initialDeposit)} USDC into SpendingPolicy`} />
-          <Row k="Agent wallet" v={short(r.agent)} />
-          <Row k="Limits" v={`${formatUsdc(r.txLimit)} / tx · ${formatUsdc(r.dailyLimit)} / day`} />
-          <Row k="Recipients" v={r.allowAnyRecipient ? "any" : r.recipients.map(short).join(", ")} />
-          <Row k="You can" v="pause, resume, revoke, withdraw anytime" />
+          <Line k="Fund" v={`${formatUsdc(r.initialDeposit)} USDC into the policy`} />
+          <Line k="Agent wallet" v={short(r.agent)} />
+          <Line k="Limits" v={`${formatUsdc(r.txLimit)} / tx · ${formatUsdc(r.dailyLimit)} / day`} />
+          <Line k="Recipients" v={r.allowAnyRecipient ? "any" : r.recipients.map(short).join(", ")} />
+          <Line k="You keep" v="pause, resume, revoke, withdraw" />
         </>
       );
     case "payment_stream":
       return (
         <>
-          <Row k="Deposit" v={`${formatUsdc(r.maxAmount)} USDC into PaymentStream`} />
-          <Row k="Recipient" v={short(r.recipient)} />
-          <Row k="Rate" v={`${formatUsdc(r.ratePerSecond * 3600n, 4)} USDC / hour`} />
-          <Row k="Runs for" v={`~${(Number(r.maxAmount / r.ratePerSecond) / 3600).toFixed(1)} hours`} />
+          <Line k="Deposit" v={`${formatUsdc(r.maxAmount)} USDC`} />
+          <Line k="Recipient" v={short(r.recipient)} />
+          <Line k="Rate" v={`${formatUsdc(r.ratePerSecond * 3600n, 4)} USDC / hour`} />
+          <Line k="Runs for" v={`~${(Number(r.maxAmount / r.ratePerSecond) / 3600).toFixed(1)} hours`} />
         </>
       );
   }
-  void config;
+}
+
+function Done({ intent, explorer, onNew }: { intent: ResolvedIntent | null; explorer?: string; onNew: () => void }) {
+  const href = intent?.type === "agent_policy" ? "/agents" : intent?.type === "payment_stream" ? "/streams" : intent?.type === "conditional_payment" ? "/mandates" : "/dashboard";
+  return (
+    <div className="px-6 py-10 text-center">
+      <SuccessMark />
+      <div className="mt-4 text-2xl font-semibold tracking-tight">Rule is live on Monad</div>
+      <div className="mt-1 text-sm text-dim">The contract enforces it from here.</div>
+      {explorer && <a href={explorer} target="_blank" rel="noreferrer" className="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-forest underline underline-offset-2">View on MonadVision <ExternalLink className="size-3" /></a>}
+      <div className="mx-auto mt-6 flex max-w-xs gap-2">
+        <a href={href} className="flex flex-1 items-center justify-center rounded-full bg-lime py-3 text-sm font-semibold text-ink hover:bg-lime-deep">See it</a>
+        <button type="button" onClick={onNew} className="flex flex-1 items-center justify-center rounded-full border border-line py-3 text-sm font-semibold hover:bg-canvas">New rule</button>
+      </div>
+    </div>
+  );
 }

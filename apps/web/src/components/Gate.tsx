@@ -13,8 +13,12 @@ export function Gate({ children }: { children: React.ReactNode }) {
   if (!ready) return <p className="text-sm text-dim">Loading…</p>;
   if (!authenticated || !address)
     return (
-      <Card className="flex items-center justify-between">
-        <span className="text-sm">Sign in to create a wallet and continue.</span>
+      <Card className="mx-auto mt-16 flex max-w-md flex-col items-center gap-4 p-8 text-center">
+        <span className="grid size-12 place-items-center rounded-full bg-lime text-lg font-bold text-ink">S</span>
+        <div>
+          <div className="text-lg font-semibold">Sign in to continue</div>
+          <div className="mt-1 text-sm text-dim">Email, Google or wallet. A Monad wallet is created for you.</div>
+        </div>
         <Button onClick={login}>Sign in</Button>
       </Card>
     );
