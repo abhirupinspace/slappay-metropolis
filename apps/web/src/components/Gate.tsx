@@ -10,7 +10,7 @@ export function Gate({ children }: { children: React.ReactNode }) {
   const { ready, authenticated, login } = usePrivy();
   const { address, chainId } = useAccount();
   if (!config.isDeployed) return <Card>Contracts not deployed for chain {config.chainId}. Run the deploy script and `pnpm abis`.</Card>;
-  if (!ready) return <p className="text-sm text-neutral-500">Loading…</p>;
+  if (!ready) return <p className="text-sm text-muted">Loading…</p>;
   if (!authenticated || !address)
     return (
       <Card className="flex items-center justify-between">

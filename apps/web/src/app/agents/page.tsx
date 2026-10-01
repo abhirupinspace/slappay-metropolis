@@ -3,7 +3,8 @@
 import { useAccount } from "wagmi";
 import { formatUsdc } from "@slappay/core";
 import { Gate } from "@/components/Gate";
-import { Addr, Badge, Button, Card, Row, TxStatus } from "@/components/ui";
+import Link from "next/link";
+import { Addr, Badge, Button, Card, Icon, Row, TxStatus } from "@/components/ui";
 import { policyCall } from "@/lib/actions";
 import { usePolicies, type Policy } from "@/lib/hooks/useContracts";
 import { useTx } from "@/lib/hooks/useTx";
@@ -20,10 +21,13 @@ function List() {
   const { mine, isLoading } = usePolicies();
   return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Agents</h1>
-      {isLoading && <p className="text-sm text-neutral-500">Loading…</p>}
-      {!isLoading && mine.length === 0 && <p className="text-sm text-neutral-500">No agent policies yet. Try “Give my research agent $20 per day, max $2 per transaction”.</p>}
-      {mine.map((r) => <PolicyCard key={String(r.id)} id={r.id} p={r.data} />)}
+      <div className="flex items-center justify-between px-1">
+        <h1 className="flex items-center gap-2 text-lg font-bold"><span className="grid size-8 place-items-center rounded-full bg-card"><Icon name="bot" /></span> Agents</h1>
+        <Link href="/" className="flex items-center gap-1 text-xs font-semibold text-forest"><Icon name="plus" className="size-3.5" /> New rule</Link>
+      </div>
+      {isLoading && <p className="px-1 text-sm text-muted">Loading…</p>}
+      {!isLoading && mine.length === 0 && <p className="px-1 text-sm text-muted">No agent policies yet. Try “Give my research agent $20 per day, max $2 per transaction”.</p>}
+      <div className="grid gap-3 md:grid-cols-2">{mine.map((r) => <PolicyCard key={String(r.id)} id={r.id} p={r.data} />)}</div>
     </div>
   );
 }

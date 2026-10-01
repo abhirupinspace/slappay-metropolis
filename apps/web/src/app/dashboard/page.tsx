@@ -1,43 +1,39 @@
 "use client";
 
 import Link from "next/link";
-import { useAccount } from "wagmi";
-import { formatUsdc } from "@slappay/core";
-import { Gate } from "@/components/Gate";
-import { Card, Row } from "@/components/ui";
-import { useMandates, usePolicies, useStreams } from "@/lib/hooks/useContracts";
-import { useUsdcBalance } from "@/lib/hooks/useUsdc";
+import { ActivityCard } from "@/components/dashboard/ActivityCard";
+import { BalanceCard } from "@/components/dashboard/BalanceCard";
+import { EarningCard } from "@/components/dashboard/EarningCard";
+import { RulesCard } from "@/components/dashboard/RulesCard";
+import { SmartAccountCard } from "@/components/dashboard/SmartAccountCard";
+import { SpendingCard } from "@/components/dashboard/SpendingCard";
+import { Icon } from "@/components/ui";
+import { mockAccount, mockActivity, mockEarning, mockSmartAccounts, mockSpendingToday } from "@/lib/mock";
 
+// Layout only. Every card takes plain props; integration replaces the mock* imports with hooks.
 export default function Dashboard() {
   return (
-    <Gate>
-      <Inner />
-    </Gate>
-  );
-}
-
-function Inner() {
-  const { address } = useAccount();
-  const bal = useUsdcBalance();
-  const m = useMandates();
-  const p = usePolicies();
-  const s = useStreams();
-  const activeM = m.mine.filter((r) => r.data.status === 0);
-  const activeP = p.mine.filter((r) => r.data.active && !r.data.revoked);
-  const activeS = s.mine.filter((r) => !r.data.cancelled && r.data.withdrawn < r.data.maxAmount);
-  const locked = activeM.reduce((a, r) => a + r.data.amount, 0n) + activeP.filter((r) => r.data.owner === address).reduce((a, r) => a + r.data.balance, 0n) + activeS.filter((r) => r.data.sender === address).reduce((a, r) => a + r.data.maxAmount - r.data.withdrawn, 0n);
-  return (
     <div className="space-y-4">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
-      <div className="grid gap-3 sm:grid-cols-2">
-        <Card><Row k="Wallet USDC" v={bal.data !== undefined ? `${formatUsdc(bal.data)} USDC` : "…"} /><Row k="Committed in Slappay" v={`${formatUsdc(locked)} USDC`} /></Card>
-        <Card>
-          <Row k="Active mandates" v={<Link className="underline" href="/mandates">{activeM.length}</Link>} />
-          <Row k="Active agents" v={<Link className="underline" href="/agents">{activeP.length}</Link>} />
-          <Row k="Active streams" v={<Link className="underline" href="/streams">{activeS.length}</Link>} />
-        </Card>
+      <div className="grid gap-4 lg:grid-cols-[1.45fr_1fr]">
+        <BalanceCard account={mockAccount} />
+        <RulesCard accounts={mockSmartAccounts} committed={mockAccount.committed} />
       </div>
-      <p className="text-xs text-neutral-500">Reads directly from Monad every few seconds. Chain state is the source of truth.</p>
+
+      <section>
+        <div className="mb-2 flex items-center justify-between px-1">
+          <h2 className="text-sm font-bold">Smart accounts</h2>
+          <Link href="/" className="flex items-center gap-1 text-xs font-semibold text-forest"><Icon name="plus" className="size-3.5" /> What should your money do?</Link>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {mockSmartAccounts.map((a) => <SmartAccountCard key={`${a.kind}-${a.id}`} a={a} />)}
+        </div>
+      </section>
+
+      <div className="grid gap-4 md:grid-cols-3">
+        <SpendingCard {...mockSpendingToday} />
+        <EarningCard {...mockEarning} />
+        <ActivityCard items={mockActivity} />
+      </div>
     </div>
   );
 }

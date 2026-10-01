@@ -1,1 +1,22 @@
 @import "tailwindcss";
+
+@theme {
+  --color-canvas: #eceeec;
+  --color-card: #ffffff;
+  --color-ink: #121412;
+  --color-muted: #8f958f;
+  --color-line: #e6e8e6;
+  --color-lime: #c4f36a;
+  --color-lime-deep: #a8e544;
+  --color-forest: #1f4a2c;
+  --color-forest-deep: #163a21;
+  --color-ember: #ff6a2b;
+  --color-mint: #e6f7cf;
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --radius-card: 1.25rem;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+}
