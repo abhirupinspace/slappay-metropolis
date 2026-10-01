@@ -26,7 +26,7 @@ const EXPLORE = [
   { label: "Contract addresses", href: "https://testnet.monadvision.com/address/0x517243E456Cbe561EA34693f68CE58D9B71bA298", ext: true },
   { label: "Developer docs", href: "https://github.com/", ext: true },
   { label: "Agent marketplace", soon: true },
-  { label: "Transaction history (Envio)", soon: true },
+  { label: "Tx history (Envio)", soon: true },
 ];
 
 const ABOUT = [
@@ -41,30 +41,30 @@ export default function ToolsPage() {
   const [swap, setSwap] = useState(false);
   return (
     <>
-      <motion.div variants={stagger} initial="hidden" animate="show" className="grid gap-4 lg:h-[calc(100svh-5.5rem)] lg:min-h-[680px] lg:grid-cols-12">
+      <motion.div variants={stagger} initial="hidden" animate="show" className="grid gap-3 lg:h-[calc(100svh-5.25rem)] lg:grid-cols-12 lg:overflow-hidden">
         {/* Hero */}
-        <motion.div variants={rise} className="flex flex-col rounded-[24px] bg-lime p-7 lg:col-span-3">
-          <div className="text-4xl font-semibold tracking-[-0.03em] text-forest">Tools</div>
+        <motion.div variants={rise} className="flex min-h-0 flex-col rounded-[24px] bg-lime p-6 lg:col-span-3">
+          <div className="text-3xl font-semibold tracking-[-0.03em] text-forest">Tools</div>
           <div className="mt-2 text-sm text-forest/80">Everything your money can plug into. Swap, earn, trade, and let agents pay for you.</div>
-          <div className="mt-6 flex-1"><LiveFeed /></div>
+          <div className="mt-5 min-h-0 flex-1 overflow-hidden"><LiveFeed /></div>
           <div className="mt-5 text-[11px] text-forest/70">That feed is the real x402 flow: 402 → policy spend → 200, verified onchain.</div>
         </motion.div>
 
         {/* Banners */}
-        <div className="flex flex-col gap-4 lg:col-span-6">
+        <div className="flex min-h-0 flex-col gap-3 lg:col-span-6">
           {BANNERS.map((b) => {
             const inner = (
-              <motion.div variants={rise} whileHover={b.status === "soon" ? {} : { y: -3 }} transition={{ duration: 0.3, ease }} className={`group relative flex min-h-36 flex-1 overflow-hidden rounded-[24px] ${b.bg} ${b.status === "soon" ? "cursor-default" : "cursor-pointer"}`}>
+              <motion.div variants={rise} whileHover={b.status === "soon" ? {} : { y: -3 }} transition={{ duration: 0.3, ease }} className={`group relative flex min-h-0 flex-1 overflow-hidden rounded-[24px] ${b.bg} ${b.status === "soon" ? "cursor-default" : "cursor-pointer"}`}>
                 <div className={`absolute inset-y-0 right-0 w-[46%] ${b.split} [clip-path:polygon(18%_0,100%_0,100%_100%,0_100%)] transition-transform duration-500 group-hover:translate-x-1`} />
-                <div className="relative z-10 flex flex-1 flex-col justify-center p-7">
+                <div className="relative z-10 flex flex-1 flex-col justify-center px-6 py-4">
                   <div className="flex items-center gap-2">
-                    <span className={`text-3xl font-semibold tracking-[-0.03em] ${b.fg}`}>{b.title}</span>
+                    <span className={`text-2xl font-semibold tracking-[-0.03em] ${b.fg}`}>{b.title}</span>
                     <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${pill[b.status]}`}>{b.status}</span>
                   </div>
-                  <div className={`mt-1.5 max-w-[260px] text-sm ${b.fg} opacity-80`}>{b.sub}</div>
-                  {b.status !== "soon" && <div className={`mt-3 inline-flex items-center gap-1 text-xs font-semibold ${b.fg}`}>Open <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></div>}
+                  <div className={`mt-1 max-w-[260px] text-[13px] leading-snug ${b.fg} opacity-80`}>{b.sub}</div>
+                  {b.status !== "soon" && <div className={`mt-2 inline-flex items-center gap-1 text-xs font-semibold ${b.fg}`}>Open <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></div>}
                 </div>
-                <div className="relative z-10 w-[40%] max-w-56 p-5">{b.art}</div>
+                <div className="relative z-10 w-[36%] max-w-48 p-4">{b.art}</div>
               </motion.div>
             );
             if (b.action === "swap") return <button key={b.title} type="button" onClick={() => setSwap(true)} className="flex flex-1 text-left">{inner}</button>;
@@ -74,22 +74,22 @@ export default function ToolsPage() {
         </div>
 
         {/* Explore */}
-        <motion.div variants={rise} className="flex flex-col rounded-[24px] bg-card p-7 lg:col-span-3">
+        <motion.div variants={rise} className="flex min-h-0 flex-col overflow-hidden rounded-[24px] bg-card p-6 lg:col-span-3">
           <div className="text-xs font-semibold uppercase tracking-wide text-dim">Explore more</div>
-          <ul className="mt-3 space-y-2.5">
+          <ul className="mt-3 space-y-2">
             {EXPLORE.map((e) => (
               <li key={e.label}>
                 {"soon" in e && e.soon ? (
-                  <span className="flex items-center justify-between text-lg font-semibold text-dim/60">{e.label}<span className="rounded-full bg-canvas px-2 py-0.5 text-[10px] font-bold uppercase text-dim">Soon</span></span>
+                  <span className="flex items-center justify-between text-base font-semibold text-dim/60">{e.label}<span className="rounded-full bg-canvas px-2 py-0.5 text-[10px] font-bold uppercase text-dim">Soon</span></span>
                 ) : (
-                  <Link href={e.href!} target={e.ext ? "_blank" : undefined} className="group flex items-center justify-between text-lg font-semibold transition hover:text-forest">
+                  <Link href={e.href!} target={e.ext ? "_blank" : undefined} className="group flex items-center justify-between text-base font-semibold transition hover:text-forest">
                     {e.label}<ArrowUpRight className="size-4 opacity-0 transition group-hover:opacity-100" />
                   </Link>
                 )}
               </li>
             ))}
           </ul>
-          <div className="mt-auto border-t border-line pt-5">
+          <div className="mt-auto border-t border-line pt-4">
             <div className="text-xs font-semibold uppercase tracking-wide text-dim">Built on</div>
             <ul className="mt-2 space-y-1.5">
               {ABOUT.map((a) => (
