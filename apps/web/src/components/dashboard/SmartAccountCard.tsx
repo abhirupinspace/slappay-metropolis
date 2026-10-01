@@ -16,7 +16,7 @@ export function SmartAccountCard({ a }: { a: SmartAccount }) {
   const line2 = a.kind === "agent" ? `$${usd(a.spentToday)} spent today` : a.kind === "stream" ? `$${usd(a.accrued)} of $${usd(a.max)} ${a.role === "sender" ? "paid" : "earned"}` : a.role === "sender" ? "You locked this" : "Locked for you";
   const pct = a.kind === "agent" ? a.spentToday / a.perDay : a.kind === "stream" ? a.accrued / a.max : 0;
   return (
-    <Link href={href} className="block rounded-card bg-card p-4 transition hover:-translate-y-0.5 hover:shadow-sm">
+    <Link href={href} className="block rounded-card border border-line bg-card p-4 transition hover:-translate-y-0.5 hover:shadow-sm">
       <div className="flex items-center justify-between">
         <span className="grid size-9 place-items-center rounded-full bg-canvas text-ink"><Icon name={icon} /></span>
         <Badge tone={tone(a.status)}>{a.status}</Badge>

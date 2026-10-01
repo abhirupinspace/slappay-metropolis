@@ -24,11 +24,11 @@ export function Nav() {
   return (
     <header className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6">
       <div className="flex items-center gap-3">
-        <div className="grid size-9 place-items-center rounded-full bg-forest text-sm font-bold text-lime">S</div>
+        <div className="grid size-9 place-items-center rounded-full bg-ink text-sm font-bold text-lime">S</div>
         <span className="text-lg font-bold tracking-tight">Hello, {name}</span>
       </div>
 
-      <nav className="hidden items-center gap-1 rounded-full bg-card p-1 md:flex">
+      <nav className="hidden items-center gap-1 rounded-full border border-line bg-card p-1 md:flex">
         {TABS.map((t) => {
           const active = path === t.href || (t.href !== "/dashboard" && path.startsWith(t.href));
           return (
@@ -40,10 +40,10 @@ export function Nav() {
       </nav>
 
       <div className="flex items-center gap-2">
-        <Link href="/" className="hidden items-center gap-1.5 rounded-full bg-card px-3 py-2 text-xs font-semibold text-ink sm:flex" title="New rule">
+        <Link href="/" className="hidden items-center gap-1.5 rounded-full border border-line bg-card px-3 py-2 text-xs font-semibold text-ink sm:flex" title="New rule">
           <Icon name="spark" className="size-3.5" /> New rule
         </Link>
-        <span className="hidden rounded-full bg-card px-3 py-2 text-xs font-medium text-muted lg:inline">{config.chain.name}</span>
+        <span className="hidden rounded-full border border-line bg-card px-3 py-2 text-xs font-medium text-muted lg:inline">{config.chain.name}</span>
         {authenticated && address ? (
           <Button variant="secondary" size="sm" onClick={logout}>{short(address)}</Button>
         ) : (

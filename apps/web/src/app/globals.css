@@ -1,17 +1,19 @@
 @import "tailwindcss";
 
+/* Brand palette (docs/brand.md): primary #fbfff8, secondary #f8ffec, dark #0e100c, green #ddff9f */
 @theme {
-  --color-canvas: #eceeec;
-  --color-card: #ffffff;
-  --color-ink: #121412;
-  --color-muted: #8f958f;
-  --color-line: #e6e8e6;
-  --color-lime: #c4f36a;
-  --color-lime-deep: #a8e544;
-  --color-forest: #1f4a2c;
-  --color-forest-deep: #163a21;
+  --color-canvas: #f8ffec;      /* secondary: page background */
+  --color-card: #fbfff8;        /* primary: surfaces */
+  --color-ink: #0e100c;         /* dark: text, buttons, pills */
+  --color-ink-soft: #2a2e26;
+  --color-muted: #7d8577;
+  --color-line: #e3eed0;        /* hairline between card and canvas */
+  --color-lime: #ddff9f;        /* green: accent surfaces */
+  --color-lime-deep: #c4f266;   /* progress bars, hover */
+  --color-forest: #0e100c;      /* kept as an alias: filled buttons are dark */
+  --color-forest-deep: #000000;
   --color-ember: #ff6a2b;
-  --color-mint: #e6f7cf;
+  --color-mint: #eefbd3;
   --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
   --radius-card: 1.25rem;
 }

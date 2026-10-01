@@ -18,10 +18,10 @@ export function RulesCard({ accounts, committed }: { accounts: SmartAccount[]; c
         <span className="inline-flex items-center gap-1.5 rounded-full bg-forest px-3 py-1.5 text-xs font-bold text-lime">
           YOUR RULES <Icon name="spark" className="size-3" />
         </span>
-        <Link href="/" className="grid size-8 place-items-center rounded-full bg-white/60 text-ink hover:bg-white"><Icon name="plus" /></Link>
+        <Link href="/" className="grid size-8 place-items-center rounded-full bg-card/70 text-ink hover:bg-card"><Icon name="plus" /></Link>
       </div>
       <div className="relative">
-        <div className="text-xs text-forest/80">Money working for you</div>
+        <div className="text-xs text-ink/70">Money working for you</div>
         <div className="mt-1 flex items-center gap-3">
           <span className="text-4xl font-bold tracking-tight text-ink">${usd(committed)}</span>
           <span className="rounded-full bg-forest px-2 py-0.5 text-[11px] font-semibold text-lime">{agents + streams + mandates} active</span>
@@ -33,8 +33,8 @@ export function RulesCard({ accounts, committed }: { accounts: SmartAccount[]; c
           { label: "Streams", n: streams, icon: "stream" as const, href: "/streams" },
           { label: "Mandates", n: mandates, icon: "lock" as const, href: "/mandates" },
         ].map((t) => (
-          <Link key={t.label} href={t.href} className="rounded-2xl bg-white/55 p-3 hover:bg-white/80">
-            <div className="text-[11px] text-forest/80">{t.label}</div>
+          <Link key={t.label} href={t.href} className="rounded-2xl bg-card/70 p-3 hover:bg-card">
+            <div className="text-[11px] text-ink/70">{t.label}</div>
             <div className="mt-1 flex items-center gap-1.5 text-lg font-bold"><Icon name={t.icon} className="size-4" /> {t.n}</div>
           </Link>
         ))}

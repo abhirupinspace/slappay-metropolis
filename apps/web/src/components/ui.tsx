@@ -7,7 +7,8 @@ import type { TxState } from "@/lib/hooks/useTx";
 
 export function Card({ children, className = "", tone = "white" }: { children: React.ReactNode; className?: string; tone?: "white" | "lime" | "mint" }) {
   const bg = { white: "bg-card", lime: "bg-lime", mint: "bg-mint" }[tone];
-  return <div className={`rounded-card ${bg} p-5 ${className}`}>{children}</div>;
+  const border = tone === "white" ? "border border-line" : "";
+  return <div className={`rounded-card ${bg} ${border} p-5 ${className}`}>{children}</div>;
 }
 
 export function CardTitle({ icon, children, right }: { icon?: React.ReactNode; children: React.ReactNode; right?: React.ReactNode }) {
@@ -32,7 +33,7 @@ export function Button({
   const sz = size === "sm" ? "px-3 py-1.5 text-xs" : "px-4 py-2 text-sm";
   const styles = {
     primary: "bg-forest text-white hover:bg-forest-deep",
-    secondary: "border border-forest/30 bg-white text-forest hover:bg-mint",
+    secondary: "border border-ink/20 bg-card text-ink hover:bg-mint",
     lime: "bg-lime text-ink hover:bg-lime-deep",
     danger: "border border-red-200 bg-white text-red-700 hover:bg-red-50",
     ghost: "text-muted hover:bg-canvas hover:text-ink",
