@@ -3,7 +3,8 @@
 import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useAccount } from "wagmi";
-import { ArrowRight, Check, Copy, Share2 } from "lucide-react";
+import { ArrowRight, Check, Copy, QrCode, Share2 } from "lucide-react";
+import { QRCodeSVG } from "qrcode.react";
 import { buildPayLink, type Asset } from "@/lib/pay-link";
 import { TokenLogo } from "@/components/TokenLogo";
 import { BigAmount } from "./BigAmount";
@@ -20,6 +21,7 @@ export function RequestModal({ open, onOpenChange }: { open: boolean; onOpenChan
   const [memo, setMemo] = useState("");
   const [stage, setStage] = useState<"amount" | "link">("amount");
   const [copied, setCopied] = useState(false);
+  const [showQr, setShowQr] = useState(true);
 
   const link = useMemo(() => (address && origin ? buildPayLink(origin, { to: address, asset, amount: amount || undefined, memo: memo || undefined }) : ""), [address, origin, asset, amount, memo]);
   const close = useCallback(() => { onOpenChange(false); setTimeout(() => setStage("amount"), 300); }, [onOpenChange]);
@@ -47,8 +49,8 @@ export function RequestModal({ open, onOpenChange }: { open: boolean; onOpenChan
         {stage === "amount" ? (
           <Stage k="amount">
             <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
-              <BigAmount value={amount} onChange={setAmount} asset={asset} placeholder="Any" />
-              <div className="mt-4 text-sm text-dim">Leave empty to let them choose the amount</div>
+              <BigAmount value={amount} onChange={setAmount} asset={asset} />
+              <div className="mt-4 text-sm text-dim">{amount ? "They will be asked for exactly this amount" : "Leave at 0 to let them choose the amount"}</div>
               <div className="mt-12 flex items-baseline gap-2 text-lg sm:text-xl">
                 <span className="text-dim">for</span>
                 <input value={memo} onChange={(e) => setMemo(e.target.value)} placeholder="dinner, invoice #12…" size={Math.max(memo.length, 18)} className={`border-b-2 bg-transparent text-center font-semibold outline-none placeholder:font-normal placeholder:text-dim/60 ${memo ? "border-forest" : "border-line"} focus:border-forest`} />
@@ -60,12 +62,23 @@ export function RequestModal({ open, onOpenChange }: { open: boolean; onOpenChan
           <Stage k="link">
             <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
               <div className="text-xs font-bold uppercase tracking-[0.18em] text-dim">Your payment link</div>
-              <div className="mt-4 flex items-center gap-4">
-                <TokenLogo symbol={asset} size={48} />
-                <div className="text-[64px] font-semibold leading-none tracking-[-0.05em] sm:text-[88px]">{amount ? `${asset === "USDC" ? "$" : ""}${amount}` : "Any"}<span className="ml-2 text-2xl text-dim">{asset}</span></div>
-              </div>
-              {memo && <div className="mt-3 text-lg text-dim">{memo}</div>}
-              <motion.button whileTap={{ scale: 0.98 }} onClick={copy} className="mt-10 max-w-xl break-all rounded-2xl bg-canvas px-5 py-3 font-mono text-xs text-ink transition hover:bg-line" title="Copy">
+              <AnimatePresence mode="wait" initial={false}>
+                {showQr ? (
+                  <motion.div key="qr" initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.92 }} transition={{ duration: 0.3 }} className="mt-6 rounded-[28px] bg-white p-5 shadow-[0_24px_60px_-30px_rgba(18,20,18,0.35)]">
+                    <QRCodeSVG value={link} size={220} level="M" bgColor="#ffffff" fgColor="#121412" imageSettings={{ src: asset === "USDC" ? "/logos/usdc.svg" : "/logos/monad.png", height: 44, width: 44, excavate: true }} />
+                  </motion.div>
+                ) : (
+                  <motion.div key="amt" initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.96 }} transition={{ duration: 0.3 }} className="mt-6 flex items-center gap-4">
+                    <TokenLogo symbol={asset} size={48} />
+                    <div className="text-[64px] font-semibold leading-none tracking-[-0.05em] sm:text-[88px]">{amount ? `${asset === "USDC" ? "$" : ""}${amount}` : "Any"}<span className="ml-2 text-2xl text-dim">{asset}</span></div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+              <div className="mt-5 text-lg font-semibold">{amount ? `${asset === "USDC" ? "$" : ""}${amount} ${asset}` : `Any amount in ${asset}`}{memo && <span className="font-normal text-dim"> · {memo}</span>}</div>
+              <button type="button" onClick={() => setShowQr(!showQr)} className="mt-2 inline-flex items-center gap-1.5 text-xs font-semibold text-forest">
+                <QrCode className="size-3.5" /> {showQr ? "Hide QR" : "Show QR"}
+              </button>
+              <motion.button whileTap={{ scale: 0.98 }} onClick={copy} className="mt-6 max-w-xl break-all rounded-2xl bg-canvas px-5 py-3 font-mono text-[11px] text-ink transition hover:bg-line" title="Copy">
                 {link}
               </motion.button>
             </div>
