@@ -39,7 +39,6 @@ export function BigAmount({ value, onChange, asset, autoFocus = true, placeholde
         ) : (
           <span className="text-line">{placeholder}</span>
         )}
-        {!disabled && <motion.span animate={{ opacity: [1, 0, 1] }} transition={{ duration: 1.1, repeat: Infinity }} className="ml-1 inline-block h-[0.8em] w-[3px] translate-y-[0.08em] rounded-full bg-forest" />}
       </span>
       <span className="pb-3 text-xl font-semibold text-dim sm:pb-5 sm:text-2xl">{asset}</span>
     </button>
