@@ -21,7 +21,7 @@ export function LiveFeed() {
   }, []);
   const tone = { dim: "text-white/50", ember: "text-[#ffb088]", white: "text-white", lime: "text-lime" };
   return (
-    <div className="rounded-[20px] bg-ink p-4 font-mono text-[11px] leading-6">
+    <div className="flex h-full flex-col rounded-[20px] bg-ink p-4 font-mono text-[11px] leading-6">
       <div className="mb-2 flex gap-1.5"><span className="size-2 rounded-full bg-white/20" /><span className="size-2 rounded-full bg-white/20" /><span className="size-2 rounded-full bg-lime" /></div>
       <div className="text-white/40">$ agent fetch …/weather</div>
       <AnimatePresence initial={false}>
