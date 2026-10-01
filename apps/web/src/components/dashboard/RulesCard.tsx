@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import type { SmartAccount } from "@/lib/mock";
+import type { SmartAccount } from "@/lib/types";
 import { Icon } from "../primitives";
 import { FadeNumber, MotionCard } from "../motion";
 

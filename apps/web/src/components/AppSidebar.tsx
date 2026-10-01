@@ -22,7 +22,7 @@ import {
 import { config } from "@/lib/config";
 import { TokenLogo } from "@/components/TokenLogo";
 import { short } from "@/lib/format";
-import { mockSmartAccounts } from "@/lib/mock";
+import { useDashboard } from "@/lib/hooks/useDashboard";
 
 const NAV = [
   { href: "/dashboard", label: "Overview", icon: LayoutGrid },
@@ -35,8 +35,7 @@ export function AppSidebar() {
   const path = usePathname();
   const { ready, authenticated, login, logout } = usePrivy();
   const { address } = useAccount();
-  const counts = { mandate: 0, agent: 0, stream: 0 } as Record<string, number>;
-  for (const a of mockSmartAccounts) if (["active", "streaming"].includes(a.status)) counts[a.kind]++;
+  const { counts } = useDashboard();
 
   return (
     <Sidebar collapsible="icon">
@@ -61,7 +60,7 @@ export function AppSidebar() {
             <SidebarMenu>
               {NAV.map((n) => {
                 const active = path === n.href || (n.href !== "/dashboard" && path.startsWith(n.href));
-                const count = "kind" in n ? counts[n.kind] : 0;
+                const count = "kind" in n ? counts[n.kind as keyof typeof counts] : 0;
                 return (
                   <SidebarMenuItem key={n.href}>
                     <SidebarMenuButton isActive={active} tooltip={n.label} render={<Link href={n.href} />}>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import type { SmartAccount } from "@/lib/mock";
+import type { SmartAccount } from "@/lib/types";
 import { Badge, Icon } from "../primitives";
 
 const usd = (n: number) => n.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 });

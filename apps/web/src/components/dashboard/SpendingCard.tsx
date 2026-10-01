@@ -40,6 +40,7 @@ export function SpendingCard({ spent, limit, byAgent }: { spent: number; limit: 
       </div>
 
       <div className="grid grid-cols-2 gap-x-5 gap-y-2 text-xs">
+        {byAgent.length === 0 && <div className="col-span-2 text-dim">No agent policies yet.</div>}
         {byAgent.map((a) => (
           <div key={a.name} className="flex items-center justify-between">
             <span className="flex items-center gap-1.5 text-dim"><Icon name="bot" className="size-3.5" /> {a.name}</span>

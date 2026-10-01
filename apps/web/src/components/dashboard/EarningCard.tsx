@@ -6,7 +6,7 @@ import { Bar, FadeNumber, MotionCard } from "../motion";
 const usd = (n: number) => n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 /** Reference: Earning. Streams flowing to you. */
-export function EarningCard({ total, deltaPct, streams }: { total: number; deltaPct: number; streams: { name: string; accrued: number; max: number }[] }) {
+export function EarningCard({ total, withdrawable, streams }: { total: number; withdrawable: number; streams: { name: string; accrued: number; max: number }[] }) {
   return (
     <MotionCard className="flex h-full flex-col bg-card p-6">
       <div className="flex items-center justify-between">
@@ -21,9 +21,10 @@ export function EarningCard({ total, deltaPct, streams }: { total: number; delta
       </div>
 
       <div className="mt-6 text-5xl font-semibold tracking-[-0.03em]"><FadeNumber value={total} prefix="$" /></div>
-      <div className="mt-1 text-xs text-dim"><span className="font-semibold text-grass">+{deltaPct}%</span> vs last week</div>
+      <div className="mt-1 text-xs text-dim"><span className="font-semibold text-grass">${usd(withdrawable)}</span> ready to withdraw · accruing live</div>
 
       <div className="mt-auto space-y-4 pt-6">
+        {streams.length === 0 && <div className="text-xs text-dim">No incoming streams yet.</div>}
         {streams.map((s) => {
           const pct = s.max > 0 ? Math.min(s.accrued / s.max, 1) : 0;
           return (

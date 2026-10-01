@@ -1,24 +1,27 @@
 "use client";
 
 import { AnimatePresence, motion } from "motion/react";
-import type { Activity } from "@/lib/mock";
-import { Icon } from "../primitives";
+import type { Activity } from "@/lib/types";
+import type { useTx } from "@/lib/hooks/useTx";
+import { Icon, TxStatus } from "../primitives";
 import { MotionCard, ease } from "../motion";
 
 const usd = (n: number) => Math.abs(n).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 /** Reference: Transactions. Pending approval row on top, then history. */
-export function ActivityCard({ items, onApprove, onDecline }: { items: Activity[]; onApprove?: (id: string) => void; onDecline?: (id: string) => void }) {
+export function ActivityCard({ items, loading, tx, onApprove, onDecline }: { items: Activity[]; loading?: boolean; tx?: ReturnType<typeof useTx>; onApprove?: (id: bigint) => void; onDecline?: (id: bigint) => void }) {
   return (
     <MotionCard className="flex h-full flex-col bg-card p-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <span className="grid size-9 place-items-center rounded-full border border-line"><Icon name="list" /></span>
-          <span className="font-semibold">Transactions</span>
+          <span className="font-semibold">Activity</span>
         </div>
         <button type="button" className="grid size-9 place-items-center rounded-full border border-line text-dim transition hover:text-ink"><Icon name="dots" /></button>
       </div>
 
+      {loading && items.length === 0 && <div className="mt-6 text-center text-xs text-dim">Reading Monad…</div>}
+      {!loading && items.length === 0 && <div className="mt-6 text-center text-xs text-dim">No rules yet. Create one and it shows up here.</div>}
       <ul className="mt-4 flex-1 space-y-1 overflow-y-auto">
         <AnimatePresence initial={false}>
           {items.map((a, i) => (
@@ -39,8 +42,8 @@ export function ActivityCard({ items, onApprove, onDecline }: { items: Activity[
               </div>
               {a.pending ? (
                 <div className="flex gap-1.5">
-                  <motion.button whileTap={{ scale: 0.9 }} onClick={() => onApprove?.(a.id)} className="grid size-8 place-items-center rounded-full bg-lime-deep text-ink"><Icon name="check" className="size-4" /></motion.button>
-                  <motion.button whileTap={{ scale: 0.9 }} onClick={() => onDecline?.(a.id)} className="grid size-8 place-items-center rounded-full border border-line text-dim"><Icon name="x" className="size-4" /></motion.button>
+                  <motion.button whileTap={{ scale: 0.9 }} onClick={() => a.mandateId !== undefined && onApprove?.(a.mandateId)} disabled={tx?.busy} className="grid size-8 place-items-center rounded-full bg-lime-deep text-ink"><Icon name="check" className="size-4" /></motion.button>
+                  <motion.button whileTap={{ scale: 0.9 }} onClick={() => a.mandateId !== undefined && onDecline?.(a.mandateId)} disabled={tx?.busy} className="grid size-8 place-items-center rounded-full border border-line text-dim"><Icon name="x" className="size-4" /></motion.button>
                 </div>
               ) : (
                 <span className={`text-sm font-bold ${a.amount >= 0 ? "text-grass" : "text-ember"}`}>{a.amount >= 0 ? "+" : "-"}${usd(a.amount)}</span>
@@ -49,6 +52,7 @@ export function ActivityCard({ items, onApprove, onDecline }: { items: Activity[
           ))}
         </AnimatePresence>
       </ul>
+      {tx && <TxStatus state={tx.state} explorer={tx.explorer} />}
     </MotionCard>
   );
 }
