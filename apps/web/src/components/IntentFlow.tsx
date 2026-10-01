@@ -10,7 +10,7 @@ import { useTx } from "@/lib/hooks/useTx";
 import { useUsdcAllowance, useUsdcBalance } from "@/lib/hooks/useUsdc";
 import type { Intent, ParseResult } from "@/lib/intent/schema";
 import { resolveIntent, unresolvedNames, type ResolvedIntent } from "@/lib/intent/validator";
-import { Button, Card, Row, TxStatus } from "./ui";
+import { Button, Card, Row, TxStatus } from "./primitives";
 
 const EXAMPLES = [
   "Pay Alex $5 when he finishes the website",

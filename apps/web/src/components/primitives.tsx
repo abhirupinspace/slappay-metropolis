@@ -36,7 +36,7 @@ export function Button({
     secondary: "border border-ink/20 bg-card text-ink hover:bg-mint",
     lime: "bg-lime text-ink hover:bg-lime-deep",
     danger: "border border-red-200 bg-white text-red-700 hover:bg-red-50",
-    ghost: "text-muted hover:bg-canvas hover:text-ink",
+    ghost: "text-dim hover:bg-canvas hover:text-ink",
   }[variant];
   return (
     <button type={type} onClick={onClick} disabled={disabled} className={`${base} ${sz} ${styles} ${className}`}>
@@ -47,7 +47,7 @@ export function Button({
 
 export function Pill({ children, active = false, onClick }: { children: React.ReactNode; active?: boolean; onClick?: () => void }) {
   return (
-    <button type="button" onClick={onClick} className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${active ? "bg-lime text-ink" : "text-muted hover:text-ink"}`}>
+    <button type="button" onClick={onClick} className={`rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${active ? "bg-lime text-ink" : "text-dim hover:text-ink"}`}>
       {children}
     </button>
   );
@@ -63,7 +63,7 @@ export function Addr({ a }: { a: string }) {
 
 export function Badge({ children, tone = "neutral" }: { children: React.ReactNode; tone?: "neutral" | "green" | "red" | "amber" | "lime" }) {
   const c = {
-    neutral: "bg-canvas text-muted", green: "bg-mint text-forest", red: "bg-red-50 text-red-700", amber: "bg-amber-50 text-amber-800", lime: "bg-lime text-ink",
+    neutral: "bg-canvas text-dim", green: "bg-mint text-forest", red: "bg-red-50 text-red-700", amber: "bg-amber-50 text-amber-800", lime: "bg-lime text-ink",
   }[tone];
   return <span className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${c}`}>{children}</span>;
 }
@@ -74,7 +74,7 @@ const labels: Record<TxState["status"], string> = {
 
 export function TxStatus({ state, explorer }: { state: TxState; explorer?: string }) {
   if (state.status === "idle") return null;
-  const tone = state.status === "confirmed" ? "text-forest" : state.status === "error" ? "text-red-700" : "text-muted";
+  const tone = state.status === "confirmed" ? "text-forest" : state.status === "error" ? "text-red-700" : "text-dim";
   return (
     <div className={`mt-3 text-xs font-medium ${tone}`}>
       <span>{labels[state.status]}</span>
@@ -91,7 +91,7 @@ export function TxStatus({ state, explorer }: { state: TxState; explorer?: strin
 export function Row({ k, v }: { k: string; v: React.ReactNode }) {
   return (
     <div className="flex justify-between gap-4 py-1.5 text-sm">
-      <span className="text-muted">{k}</span>
+      <span className="text-dim">{k}</span>
       <span className="text-right font-semibold">{v}</span>
     </div>
   );

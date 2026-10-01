@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { SmartAccount } from "@/lib/mock";
-import { Card, Icon } from "../ui";
+import { Card, Icon } from "../primitives";
 
 const usd = (n: number) => n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 

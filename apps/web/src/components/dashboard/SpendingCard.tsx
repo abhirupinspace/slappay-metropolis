@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardTitle, Icon } from "../ui";
+import { Card, CardTitle, Icon } from "../primitives";
 
 const usd = (n: number) => n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
@@ -21,7 +21,7 @@ export function SpendingCard({ spent, limit, byAgent }: { spent: number; limit: 
           <div className="absolute inset-0 grid place-items-center text-center">
             <div>
               <div className="text-2xl font-bold">${usd(spent)}</div>
-              <div className="text-[11px] text-muted">of ${usd(limit)} / day</div>
+              <div className="text-[11px] text-dim">of ${usd(limit)} / day</div>
             </div>
           </div>
         </div>
@@ -32,7 +32,7 @@ export function SpendingCard({ spent, limit, byAgent }: { spent: number; limit: 
       <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-1.5 text-xs">
         {byAgent.map((a) => (
           <div key={a.name} className="flex items-center justify-between">
-            <span className="flex items-center gap-1 text-muted"><Icon name="bot" className="size-3" /> {a.name}</span>
+            <span className="flex items-center gap-1 text-dim"><Icon name="bot" className="size-3" /> {a.name}</span>
             <span className="font-semibold">${usd(a.amount)}</span>
           </div>
         ))}

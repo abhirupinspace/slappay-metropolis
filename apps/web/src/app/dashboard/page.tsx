@@ -7,7 +7,7 @@ import { EarningCard } from "@/components/dashboard/EarningCard";
 import { RulesCard } from "@/components/dashboard/RulesCard";
 import { SmartAccountCard } from "@/components/dashboard/SmartAccountCard";
 import { SpendingCard } from "@/components/dashboard/SpendingCard";
-import { Icon } from "@/components/ui";
+import { Icon } from "@/components/primitives";
 import { mockAccount, mockActivity, mockEarning, mockSmartAccounts, mockSpendingToday } from "@/lib/mock";
 
 // Layout only. Every card takes plain props; integration replaces the mock* imports with hooks.

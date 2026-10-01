@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import type { SmartAccount } from "@/lib/mock";
-import { Badge, Icon } from "../ui";
+import { Badge, Icon } from "../primitives";
 
 const usd = (n: number) => n.toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 
@@ -22,7 +22,7 @@ export function SmartAccountCard({ a }: { a: SmartAccount }) {
         <Badge tone={tone(a.status)}>{a.status}</Badge>
       </div>
       <div className="mt-3 text-sm font-bold">{a.name}</div>
-      <div className="text-xs text-muted">{line1}</div>
+      <div className="text-xs text-dim">{line1}</div>
       <div className="mt-3 text-xs font-medium">{line2}</div>
       {a.kind !== "mandate" && (
         <div className="mt-2 h-1.5 rounded-full bg-line">

@@ -4,7 +4,7 @@ import { useAccount } from "wagmi";
 import { formatUsdc } from "@slappay/core";
 import { Gate } from "@/components/Gate";
 import Link from "next/link";
-import { Addr, Badge, Button, Card, Icon, Row, TxStatus } from "@/components/ui";
+import { Addr, Badge, Button, Card, Icon, Row, TxStatus } from "@/components/primitives";
 import { policyCall } from "@/lib/actions";
 import { usePolicies, type Policy } from "@/lib/hooks/useContracts";
 import { useTx } from "@/lib/hooks/useTx";
@@ -25,8 +25,8 @@ function List() {
         <h1 className="flex items-center gap-2 text-lg font-bold"><span className="grid size-8 place-items-center rounded-full bg-card"><Icon name="bot" /></span> Agents</h1>
         <Link href="/" className="flex items-center gap-1 text-xs font-semibold text-forest"><Icon name="plus" className="size-3.5" /> New rule</Link>
       </div>
-      {isLoading && <p className="px-1 text-sm text-muted">Loading…</p>}
-      {!isLoading && mine.length === 0 && <p className="px-1 text-sm text-muted">No agent policies yet. Try “Give my research agent $20 per day, max $2 per transaction”.</p>}
+      {isLoading && <p className="px-1 text-sm text-dim">Loading…</p>}
+      {!isLoading && mine.length === 0 && <p className="px-1 text-sm text-dim">No agent policies yet. Try “Give my research agent $20 per day, max $2 per transaction”.</p>}
       <div className="grid gap-3 md:grid-cols-2">{mine.map((r) => <PolicyCard key={String(r.id)} id={r.id} p={r.data} />)}</div>
     </div>
   );
