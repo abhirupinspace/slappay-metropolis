@@ -5,6 +5,8 @@ import { usePrivy } from "@privy-io/react-auth";
 import { useAccount } from "wagmi";
 import { Bell, Search } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { TokenLogo } from "@/components/TokenLogo";
+import { config } from "@/lib/config";
 import { short } from "@/lib/format";
 
 const TITLES: Record<string, string> = { "/dashboard": "Overview", "/mandates": "Rules", "/agents": "Agents", "/streams": "Streams", "/": "New rule" };
@@ -27,6 +29,7 @@ export function Nav() {
         </div>
       </div>
       <div className="flex items-center gap-2">
+        <span className="hidden items-center gap-1.5 rounded-full bg-card px-3 py-2 text-xs font-semibold sm:flex"><TokenLogo symbol="MON" size={16} /> {config.chain.name}</span>
         <button type="button" className="grid size-9 place-items-center rounded-full border border-line bg-card text-ink hover:bg-mint" aria-label="Search"><Search className="size-4" /></button>
         <button type="button" className="relative grid size-9 place-items-center rounded-full border border-line bg-card text-ink hover:bg-mint" aria-label="Notifications">
           <Bell className="size-4" />

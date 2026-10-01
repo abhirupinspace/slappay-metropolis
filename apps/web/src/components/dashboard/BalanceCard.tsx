@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { short } from "@/lib/format";
 import type { Account } from "@/lib/mock";
 import { Icon } from "../primitives";
+import { TokenLogo } from "../TokenLogo";
 import { FadeNumber, MotionCard, ease } from "../motion";
 
 export function BalanceCard({ account, onSend, onRequest }: { account: Account; onSend?: () => void; onRequest?: () => void }) {
@@ -18,8 +19,9 @@ export function BalanceCard({ account, onSend, onRequest }: { account: Account; 
       <div className="flex items-start justify-between">
         <div className="relative flex rounded-full bg-canvas p-1">
           {(["USDC", "MON"] as const).map((a) => (
-            <button key={a} type="button" onClick={() => setAsset(a)} className="relative z-10 rounded-full px-4 py-1.5 text-xs font-semibold text-ink">
+            <button key={a} type="button" onClick={() => setAsset(a)} className={`relative z-10 flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-semibold transition ${asset === a ? "text-ink" : "text-dim hover:text-ink"}`}>
               {asset === a && <motion.span layoutId="asset-pill" className="absolute inset-0 -z-10 rounded-full bg-card shadow-sm" transition={{ duration: 0.3, ease }} />}
+              <TokenLogo symbol={a} size={18} />
               {a}
             </button>
           ))}

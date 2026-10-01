@@ -20,6 +20,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import { config } from "@/lib/config";
+import { TokenLogo } from "@/components/TokenLogo";
 import { short } from "@/lib/format";
 import { mockSmartAccounts } from "@/lib/mock";
 
@@ -98,7 +99,7 @@ export function AppSidebar() {
                 <span className="grid size-8 shrink-0 place-items-center rounded-full bg-lime font-mono text-[10px] font-bold text-ink">{address.slice(2, 4)}</span>
                 <span className="flex flex-col leading-tight">
                   <span className="font-mono text-xs font-semibold">{short(address)}</span>
-                  <span className="text-[11px] text-white/50">{config.chain.name}</span>
+                  <span className="flex items-center gap-1 text-[11px] text-white/50"><TokenLogo symbol="MON" size={12} /> {config.chain.name}</span>
                 </span>
                 <LogOut className="ml-auto size-4 text-white/50" />
               </SidebarMenuButton>
