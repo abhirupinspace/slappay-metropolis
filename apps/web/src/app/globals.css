@@ -4,24 +4,25 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* Brand palette (docs/brand.md): primary #fbfff8, secondary #f8ffec, dark #0e100c, green #ddff9f */
+/* Reference palette (fintech overview screenshot): gray canvas, white cards, lime accent, forest buttons, ember progress */
 @theme {
-  --color-canvas: #ffffff;      /* page background */
-  --color-ink: #0e100c;         /* dark: text, buttons, pills */
-  --color-dim: #7d8577;         /* secondary text */
-  --color-line: #e3eed0;        /* hairline between card and canvas */
-  --color-lime: #ddff9f;        /* green: accent surfaces */
-  --color-lime-deep: #c4f266;   /* progress bars, hover */
-  --color-forest: #0e100c;      /* alias: filled buttons are dark */
-  --color-forest-deep: #000000;
-  --color-ember: #ff6a2b;
-  --color-mint: #eefbd3;
-  --radius-card: 1.25rem;
+  --color-canvas: #eff1ef;      /* page background */
+  --color-ink: #121412;         /* text */
+  --color-dim: #9a9f9a;         /* secondary text */
+  --color-line: #ececec;        /* hairlines */
+  --color-lime: #c9f76b;        /* accent card */
+  --color-lime-deep: #a9e04e;   /* shapes on the accent card, progress fill */
+  --color-forest: #1b4d2c;      /* filled buttons, pills */
+  --color-forest-deep: #143a21;
+  --color-ember: #ff6a1f;       /* single warm accent */
+  --color-mint: #e8f8d2;        /* soft tiles on the accent card */
+  --color-grass: #22c55e;       /* positive deltas */
+  --radius-card: 1.5rem;
 }
 
 @theme inline {
-  --font-heading: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -63,38 +64,38 @@
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #0e100c;
-  --card: #fbfff8;
-  --card-foreground: #0e100c;
-  --popover: #fbfff8;
-  --popover-foreground: #0e100c;
-  --primary: #0e100c;
-  --primary-foreground: #ddff9f;
-  --secondary: #eefbd3;
-  --secondary-foreground: #0e100c;
-  --muted: #eefbd3;
-  --muted-foreground: #7d8577;
-  --accent: #ddff9f;
-  --accent-foreground: #0e100c;
+  --background: #eff1ef;
+  --foreground: #121412;
+  --card: #ffffff;
+  --card-foreground: #121412;
+  --popover: #ffffff;
+  --popover-foreground: #121412;
+  --primary: #1b4d2c;
+  --primary-foreground: #ffffff;
+  --secondary: #f3f5f3;
+  --secondary-foreground: #121412;
+  --muted: #f3f5f3;
+  --muted-foreground: #9a9f9a;
+  --accent: #c9f76b;
+  --accent-foreground: #121412;
   --destructive: oklch(0.577 0.245 27.325);
-  --border: #e3eed0;
-  --input: #e3eed0;
-  --ring: #c4f266;
-  --chart-1: #ddff9f;
-  --chart-2: #c4f266;
-  --chart-3: #7d8577;
-  --chart-4: #2a2e26;
-  --chart-5: #0e100c;
-  --radius: 0.75rem;
-  --sidebar: #fbfff8;
-  --sidebar-foreground: #0e100c;
-  --sidebar-primary: #0e100c;
-  --sidebar-primary-foreground: #ddff9f;
-  --sidebar-accent: #ddff9f;
-  --sidebar-accent-foreground: #0e100c;
-  --sidebar-border: #e3eed0;
-  --sidebar-ring: #c4f266;
+  --border: #ececec;
+  --input: #ececec;
+  --ring: #a9e04e;
+  --chart-1: #c9f76b;
+  --chart-2: #a9e04e;
+  --chart-3: #1b4d2c;
+  --chart-4: #ff6a1f;
+  --chart-5: #9a9f9a;
+  --radius: 1rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #121412;
+  --sidebar-primary: #1b4d2c;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #c9f76b;
+  --sidebar-accent-foreground: #121412;
+  --sidebar-border: #ececec;
+  --sidebar-ring: #a9e04e;
 }
 
 .dark {
@@ -142,8 +143,11 @@
     @apply font-sans;
   }
 }
-/* Page background is the primary brand color. */
 html,
 body {
-  background: #ffffff;
+  background: #eff1ef;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }

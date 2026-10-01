@@ -7,7 +7,7 @@ import type { TxState } from "@/lib/hooks/useTx";
 
 export function Card({ children, className = "", tone = "white" }: { children: React.ReactNode; className?: string; tone?: "white" | "lime" | "mint" }) {
   const bg = { white: "bg-card", lime: "bg-lime", mint: "bg-mint" }[tone];
-  const border = tone === "white" ? "border border-line" : "";
+  const border = "";
   return <div className={`rounded-card ${bg} ${border} p-5 ${className}`}>{children}</div>;
 }
 

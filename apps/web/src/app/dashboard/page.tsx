@@ -1,39 +1,28 @@
 "use client";
 
-import Link from "next/link";
+import { motion } from "motion/react";
 import { ActivityCard } from "@/components/dashboard/ActivityCard";
 import { BalanceCard } from "@/components/dashboard/BalanceCard";
 import { EarningCard } from "@/components/dashboard/EarningCard";
 import { RulesCard } from "@/components/dashboard/RulesCard";
-import { SmartAccountCard } from "@/components/dashboard/SmartAccountCard";
 import { SpendingCard } from "@/components/dashboard/SpendingCard";
-import { Icon } from "@/components/primitives";
+import { stagger } from "@/components/motion";
 import { mockAccount, mockActivity, mockEarning, mockSmartAccounts, mockSpendingToday } from "@/lib/mock";
 
-// Layout only. Every card takes plain props; integration replaces the mock* imports with hooks.
+// Five boxes fill the canvas: 7+5 on top, 4+4+4 below. Mock data until integration.
 export default function Dashboard() {
   return (
-    <div className="space-y-4">
-      <div className="grid gap-4 lg:grid-cols-[1.45fr_1fr]">
-        <BalanceCard account={mockAccount} />
-        <RulesCard accounts={mockSmartAccounts} committed={mockAccount.committed} />
-      </div>
-
-      <section>
-        <div className="mb-2 flex items-center justify-between px-1">
-          <h2 className="text-sm font-bold">Smart accounts</h2>
-          <Link href="/" className="flex items-center gap-1 text-xs font-semibold text-forest"><Icon name="plus" className="size-3.5" /> What should your money do?</Link>
-        </div>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {mockSmartAccounts.map((a) => <SmartAccountCard key={`${a.kind}-${a.id}`} a={a} />)}
-        </div>
-      </section>
-
-      <div className="grid gap-4 md:grid-cols-3">
-        <SpendingCard {...mockSpendingToday} />
-        <EarningCard {...mockEarning} />
-        <ActivityCard items={mockActivity} />
-      </div>
-    </div>
+    <motion.div
+      variants={stagger}
+      initial="hidden"
+      animate="show"
+      className="grid gap-4 lg:h-[calc(100svh-5.5rem)] lg:min-h-[640px] lg:grid-cols-12 lg:grid-rows-[minmax(0,1fr)_minmax(0,1.05fr)]"
+    >
+      <div className="lg:col-span-7"><BalanceCard account={mockAccount} /></div>
+      <div className="lg:col-span-5"><RulesCard accounts={mockSmartAccounts} committed={mockAccount.committed} /></div>
+      <div className="lg:col-span-4"><SpendingCard {...mockSpendingToday} /></div>
+      <div className="lg:col-span-4"><EarningCard {...mockEarning} /></div>
+      <div className="lg:col-span-4"><ActivityCard items={mockActivity} /></div>
+    </motion.div>
   );
 }
