@@ -1,7 +1,7 @@
 "use client";
 
 import { Icon } from "../primitives";
-import { Bar, CountUp, MotionCard } from "../motion";
+import { Bar, FadeNumber, MotionCard } from "../motion";
 
 const usd = (n: number) => n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
@@ -20,7 +20,7 @@ export function EarningCard({ total, deltaPct, streams }: { total: number; delta
         </div>
       </div>
 
-      <div className="mt-6 text-5xl font-semibold tracking-[-0.03em]"><CountUp value={total} prefix="$" /></div>
+      <div className="mt-6 text-5xl font-semibold tracking-[-0.03em]"><FadeNumber value={total} prefix="$" /></div>
       <div className="mt-1 text-xs text-dim"><span className="font-semibold text-grass">+{deltaPct}%</span> vs last week</div>
 
       <div className="mt-auto space-y-4 pt-6">

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { motion } from "motion/react";
 import type { SmartAccount } from "@/lib/mock";
 import { Icon } from "../primitives";
-import { CountUp, MotionCard } from "../motion";
+import { FadeNumber, MotionCard } from "../motion";
 
 /** The lime card (reference: Rewards). Money currently working under rules. */
 export function RulesCard({ accounts, committed }: { accounts: SmartAccount[]; committed: number }) {
@@ -27,7 +27,7 @@ export function RulesCard({ accounts, committed }: { accounts: SmartAccount[]; c
       <div className="relative">
         <div className="text-sm text-ink/70">Money working for you</div>
         <div className="mt-1 flex flex-wrap items-center gap-3">
-          <span className="text-5xl font-semibold tracking-[-0.03em]"><CountUp value={committed} prefix="$" /></span>
+          <span className="text-5xl font-semibold tracking-[-0.03em]"><FadeNumber value={committed} prefix="$" /></span>
           <span className="rounded-full bg-forest px-2.5 py-1 text-[11px] font-semibold text-white">{agents + streams + mandates} active rules</span>
         </div>
       </div>

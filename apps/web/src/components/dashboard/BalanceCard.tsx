@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import { short } from "@/lib/format";
 import type { Account } from "@/lib/mock";
 import { Icon } from "../primitives";
-import { CountUp, MotionCard, ease } from "../motion";
+import { FadeNumber, MotionCard, ease } from "../motion";
 
 export function BalanceCard({ account, onSend, onRequest }: { account: Account; onSend?: () => void; onRequest?: () => void }) {
   const [asset, setAsset] = useState<"USDC" | "MON">("USDC");
@@ -39,7 +39,7 @@ export function BalanceCard({ account, onSend, onRequest }: { account: Account; 
         <div className="text-sm text-dim">Active Balance</div>
         <div className="mt-1 flex items-center gap-4">
           <span className="text-6xl font-semibold tracking-[-0.03em]">
-            {hidden ? "••••••" : asset === "USDC" ? <CountUp value={account.usdc} prefix="$" /> : <CountUp value={account.mon} suffix=" MON" decimals={3} />}
+            {hidden ? "••••••" : asset === "USDC" ? <FadeNumber value={account.usdc} prefix="$" /> : <FadeNumber value={account.mon} suffix=" MON" decimals={3} />}
           </span>
           <button type="button" onClick={() => setHidden(!hidden)} className="grid size-9 place-items-center rounded-full bg-canvas text-dim transition hover:text-ink">
             <Icon name="eye" className="size-4" />

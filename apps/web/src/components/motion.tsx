@@ -1,7 +1,6 @@
 "use client";
 
-import { animate, motion, useInView, useMotionValue, useTransform } from "motion/react";
-import { useEffect, useRef } from "react";
+import { motion } from "motion/react";
 
 /** Shared easing for the dashboard. */
 export const ease = [0.22, 1, 0.36, 1] as const;
@@ -29,18 +28,20 @@ export function MotionCard({ children, className = "", lift = true }: { children
   );
 }
 
-/** Animated number: counts from 0 to `value` on mount. */
-export function CountUp({ value, prefix = "", suffix = "", decimals = 2, className = "" }: { value: number; prefix?: string; suffix?: string; decimals?: number; className?: string }) {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true });
-  const mv = useMotionValue(0);
-  const text = useTransform(mv, (v) => `${prefix}${v.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}${suffix}`);
-  useEffect(() => {
-    if (!inView) return;
-    const c = animate(mv, value, { duration: 1.1, ease });
-    return () => c.stop();
-  }, [inView, value, mv]);
-  return <motion.span ref={ref} className={className}>{text}</motion.span>;
+/** Number that fades/blurs in once; re-fades when the value changes. No counting. */
+export function FadeNumber({ value, prefix = "", suffix = "", decimals = 2, className = "" }: { value: number; prefix?: string; suffix?: string; decimals?: number; className?: string }) {
+  const text = `${prefix}${value.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}${suffix}`;
+  return (
+    <motion.span
+      key={text}
+      initial={{ opacity: 0, y: 6, filter: "blur(6px)" }}
+      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      transition={{ duration: 0.6, ease }}
+      className={`inline-block ${className}`}
+    >
+      {text}
+    </motion.span>
+  );
 }
 
 /** Horizontal bar that grows to `pct` (0..1). */

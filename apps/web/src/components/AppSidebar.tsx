@@ -43,10 +43,10 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" render={<Link href="/dashboard" />}>
-              <span className="grid size-8 shrink-0 place-items-center rounded-full bg-ink text-sm font-bold text-lime">S</span>
+              <span className="grid size-8 shrink-0 place-items-center rounded-full bg-lime text-sm font-bold text-ink">S</span>
               <span className="flex flex-col leading-tight">
                 <span className="text-sm font-bold">Slappay</span>
-                <span className="text-[11px] text-dim">Programmable neobank</span>
+                <span className="text-[11px] text-white/50">Programmable neobank</span>
               </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -80,7 +80,7 @@ export function AppSidebar() {
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
-                <SidebarMenuButton isActive={path === "/"} tooltip="New rule" render={<Link href="/" />} className="bg-lime font-semibold hover:bg-lime-deep data-active:bg-lime-deep">
+                <SidebarMenuButton isActive={path === "/"} tooltip="New rule" render={<Link href="/" />} className="bg-lime font-semibold text-ink hover:bg-lime-deep data-active:bg-lime-deep">
                   <Sparkles />
                   <span>New rule</span>
                 </SidebarMenuButton>
@@ -95,19 +95,19 @@ export function AppSidebar() {
           <SidebarMenuItem>
             {authenticated && address ? (
               <SidebarMenuButton size="lg" tooltip="Log out" onClick={logout}>
-                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-mint font-mono text-[10px] font-bold">{address.slice(2, 4)}</span>
+                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-lime font-mono text-[10px] font-bold text-ink">{address.slice(2, 4)}</span>
                 <span className="flex flex-col leading-tight">
                   <span className="font-mono text-xs font-semibold">{short(address)}</span>
-                  <span className="text-[11px] text-dim">{config.chain.name}</span>
+                  <span className="text-[11px] text-white/50">{config.chain.name}</span>
                 </span>
-                <LogOut className="ml-auto size-4 text-dim" />
+                <LogOut className="ml-auto size-4 text-white/50" />
               </SidebarMenuButton>
             ) : (
               <SidebarMenuButton size="lg" tooltip="Sign in" onClick={login} disabled={!ready}>
-                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-ink text-lime"><LogIn className="size-4" /></span>
+                <span className="grid size-8 shrink-0 place-items-center rounded-full bg-lime text-ink"><LogIn className="size-4" /></span>
                 <span className="flex flex-col leading-tight">
                   <span className="text-sm font-semibold">Sign in</span>
-                  <span className="text-[11px] text-dim">Email, Google or wallet</span>
+                  <span className="text-[11px] text-white/50">Email, Google or wallet</span>
                 </span>
               </SidebarMenuButton>
             )}
