@@ -1,7 +1,8 @@
 # Slappay brand
 
 Palette (user-supplied 2026-10-02):
-- Primary `#fbfff8` — page canvas and card surfaces (cards separated by hairline)
+- Page background: white `#ffffff`
+- Primary `#fbfff8` — card surfaces
 - Secondary `#f8ffec` — tints, hover, secondary surfaces
 - Dark `#0e100c` — text, filled buttons, pills
 - Green `#ddff9f` — accent surfaces (rules card, active tab, progress)

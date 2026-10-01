@@ -6,7 +6,7 @@
 
 /* Brand palette (docs/brand.md): primary #fbfff8, secondary #f8ffec, dark #0e100c, green #ddff9f */
 @theme {
-  --color-canvas: #fbfff8;      /* primary: page background */
+  --color-canvas: #ffffff;      /* page background */
   --color-ink: #0e100c;         /* dark: text, buttons, pills */
   --color-dim: #7d8577;         /* secondary text */
   --color-line: #e3eed0;        /* hairline between card and canvas */
@@ -63,7 +63,7 @@
 }
 
 :root {
-  --background: #fbfff8;
+  --background: #ffffff;
   --foreground: #0e100c;
   --card: #fbfff8;
   --card-foreground: #0e100c;
@@ -145,5 +145,5 @@
 /* Page background is the primary brand color. */
 html,
 body {
-  background: #fbfff8;
+  background: #ffffff;
 }
