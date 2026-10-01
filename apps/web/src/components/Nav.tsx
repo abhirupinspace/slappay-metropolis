@@ -9,7 +9,7 @@ import { TokenLogo } from "@/components/TokenLogo";
 import { config } from "@/lib/config";
 import { short } from "@/lib/format";
 
-const TITLES: Record<string, string> = { "/dashboard": "Overview", "/card": "Card", "/mandates": "Rules", "/agents": "Agents", "/streams": "Streams", "/tools": "Tools", "/pay": "Pay", "/": "New rule" };
+const TITLES: Record<string, string> = { "/dashboard": "Overview", "/card": "Card", "/mandates": "Rules", "/agents": "Agents", "/streams": "Streams", "/tools": "Tools", "/pay": "Pay", "/new": "New rule" };
 
 /** Slim top bar inside the inset: trigger, greeting, quick actions. */
 export function Nav() {

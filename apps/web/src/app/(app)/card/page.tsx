@@ -49,7 +49,7 @@ export default function CardPage() {
       </motion.ul>
 
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }} className="mt-8">
-        <Link href="/" className="inline-flex items-center gap-2 rounded-full bg-forest px-5 py-3 text-sm font-semibold text-white transition hover:bg-forest-deep">
+        <Link href="/new" className="inline-flex items-center gap-2 rounded-full bg-forest px-5 py-3 text-sm font-semibold text-white transition hover:bg-forest-deep">
           Meanwhile, set a spending rule <ArrowRight className="size-4" />
         </Link>
       </motion.div>

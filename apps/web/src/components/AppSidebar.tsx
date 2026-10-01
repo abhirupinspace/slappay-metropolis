@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { usePrivy } from "@privy-io/react-auth";
 import { useAccount } from "wagmi";
 import { AnimatePresence, motion } from "motion/react";
@@ -63,7 +63,7 @@ export function AppSidebar() {
 
         <SidebarGroup className="mt-2 p-0">
           <SidebarGroupLabel className="px-2 text-white/40 group-data-[collapsible=icon]:hidden">Create</SidebarGroupLabel>
-          <div className={collapsed ? "flex justify-center" : ""}><NavItem href="/" label="New rule" icon={Sparkles} active={path === "/"} collapsed={collapsed} accent /></div>
+          <div className={collapsed ? "flex justify-center" : ""}><NavItem href="/new" label="New rule" icon={Sparkles} active={path === "/new"} collapsed={collapsed} accent /></div>
         </SidebarGroup>
       </SidebarContent>
 
@@ -125,6 +125,8 @@ function Account({ collapsed }: { collapsed: boolean }) {
   const { ready, authenticated, login, logout, user } = usePrivy();
   const { address } = useAccount();
   const { usdc } = useBalances();
+  const router = useRouter();
+  const signOut = async () => { await logout(); router.push("/"); };
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const name = user?.email?.address ?? user?.google?.email ?? (address ? short(address) : "");
@@ -155,11 +157,11 @@ function Account({ collapsed }: { collapsed: boolean }) {
             </div>
             <MenuItem onClick={copy} icon={copied ? <Check className="size-4 text-lime" /> : <Copy className="size-4" />}>{copied ? "Copied" : "Copy address"}</MenuItem>
             <MenuItem href={explorerAddressUrl(config.chainId, address)} icon={<ExternalLink className="size-4" />}>View on MonadVision</MenuItem>
-            <MenuItem onClick={() => { setOpen(false); logout(); }} icon={<LogOut className="size-4" />} danger>Log out</MenuItem>
+            <MenuItem onClick={() => { setOpen(false); signOut(); }} icon={<LogOut className="size-4" />} danger>Log out</MenuItem>
           </motion.div>
         )}
       </AnimatePresence>
-      <button type="button" onClick={() => (collapsed ? logout() : setOpen(!open))} className={`flex w-full items-center gap-3 rounded-xl p-2 text-left transition hover:bg-white/5 ${open ? "bg-white/5" : ""} ${collapsed ? "justify-center" : ""}`}>
+      <button type="button" onClick={() => (collapsed ? signOut() : setOpen(!open))} className={`flex w-full items-center gap-3 rounded-xl p-2 text-left transition hover:bg-white/5 ${open ? "bg-white/5" : ""} ${collapsed ? "justify-center" : ""}`}>
         <span className="relative grid size-8 shrink-0 place-items-center rounded-full bg-[conic-gradient(from_180deg,#c9f76b,#1b4d2c,#c9f76b)] font-mono text-[10px] font-bold text-ink">
           <span className="grid size-6 place-items-center rounded-full bg-lime">{address.slice(2, 4)}</span>
           <span className="absolute -bottom-0.5 -right-0.5 size-2.5 rounded-full bg-grass ring-2 ring-[#121412]" title="Connected" />

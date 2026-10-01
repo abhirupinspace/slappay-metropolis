@@ -24,7 +24,7 @@ function List() {
     <div className="space-y-4">
       <div className="flex items-center justify-between px-1">
         <h1 className="flex items-center gap-2 text-lg font-bold"><span className="grid size-8 place-items-center rounded-full bg-card"><Icon name="stream" /></span> Streams</h1>
-        <Link href="/" className="flex items-center gap-1 text-xs font-semibold text-forest"><Icon name="plus" className="size-3.5" /> New rule</Link>
+        <Link href="/new" className="flex items-center gap-1 text-xs font-semibold text-forest"><Icon name="plus" className="size-3.5" /> New rule</Link>
       </div>
       {isLoading && <p className="px-1 text-sm text-dim">Loading…</p>}
       {!isLoading && mine.length === 0 && <p className="px-1 text-sm text-dim">No streams yet. Try “Pay Sarah $20/hour until $100”.</p>}

@@ -21,7 +21,7 @@ export function RulesCard({ accounts, committed }: { accounts: SmartAccount[]; c
         <span className="inline-flex items-center gap-2 rounded-full bg-forest px-4 py-2 text-xs font-bold tracking-wide text-white">
           YOUR RULES <Icon name="spark" className="size-3.5 text-lime" />
         </span>
-        <Link href="/" className="grid size-9 place-items-center rounded-full bg-white/50 text-ink transition hover:bg-white"><Icon name="dots" /></Link>
+        <Link href="/new" className="grid size-9 place-items-center rounded-full bg-white/50 text-ink transition hover:bg-white"><Icon name="dots" /></Link>
       </div>
 
       <div className="relative">
