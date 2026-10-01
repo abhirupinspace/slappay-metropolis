@@ -19,7 +19,7 @@ import { ease } from "@/components/motion";
 
 const NAV = [
   { href: "/dashboard", label: "Overview", icon: LayoutGrid },
-  { href: "/card", label: "Card", icon: CreditCard },
+  { href: "/card", label: "Card", icon: CreditCard, soon: true },
   { href: "/mandates", label: "Rules", icon: Lock, kind: "mandate" },
   { href: "/agents", label: "Agents", icon: Bot, kind: "agent" },
   { href: "/streams", label: "Streams", icon: Waves, kind: "stream" },
@@ -55,7 +55,7 @@ export function AppSidebar() {
               const active = isActive(n.href);
               const count = "kind" in n ? counts[n.kind as keyof typeof counts] : 0;
               return (
-                <NavItem key={n.href} href={n.href} label={n.label} icon={n.icon} active={active} count={count} collapsed={collapsed} />
+                <NavItem key={n.href} href={n.href} label={n.label} icon={n.icon} active={active} count={count} collapsed={collapsed} soon={"soon" in n && n.soon} />
               );
             })}
           </nav>
@@ -88,7 +88,7 @@ function Label({ collapsed, children, className = "" }: { collapsed: boolean; ch
   );
 }
 
-function NavItem({ href, label, icon: Icon, active, count = 0, collapsed, accent = false }: { href: string; label: string; icon: typeof LayoutGrid; active: boolean; count?: number; collapsed: boolean; accent?: boolean }) {
+function NavItem({ href, label, icon: Icon, active, count = 0, collapsed, accent = false, soon = false }: { href: string; label: string; icon: typeof LayoutGrid; active: boolean; count?: number; collapsed: boolean; accent?: boolean; soon?: boolean }) {
   const body = (
     <Link href={href} className={`group relative flex h-10 items-center rounded-xl outline-none ${collapsed ? "w-10 justify-center px-0" : "gap-3 px-2.5"}`}>
       {active && (
@@ -102,6 +102,7 @@ function NavItem({ href, label, icon: Icon, active, count = 0, collapsed, accent
       <Label collapsed={collapsed} className={`relative z-10 flex-1 text-sm ${active ? (accent ? "font-semibold text-ink" : "font-semibold text-white") : accent ? "font-semibold text-lime" : "font-medium text-white/80 group-hover:text-white"}`}>
         {label}
       </Label>
+      {!collapsed && soon && <span className="relative z-10 rounded-full bg-white/10 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-white/60">Soon</span>}
       {!collapsed && count > 0 && (
         <AnimatePresence mode="popLayout" initial={false}>
           <motion.span key={count} initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }} transition={spring} className={`relative z-10 min-w-5 rounded-full px-1.5 py-0.5 text-center text-[10px] font-bold ${active ? "bg-lime text-ink" : "bg-white/10 text-white/80"}`}>
