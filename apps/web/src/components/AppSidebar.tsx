@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { usePrivy } from "@privy-io/react-auth";
 import { useAccount } from "wagmi";
 import { AnimatePresence, motion } from "motion/react";
-import { Bot, Check, ChevronsUpDown, Copy, ExternalLink, LayoutGrid, Lock, LogIn, LogOut, Sparkles, Waves } from "lucide-react";
+import { Bot, Check, ChevronsUpDown, Copy, CreditCard, ExternalLink, LayoutGrid, Lock, LogIn, LogOut, Sparkles, Waves, Wrench } from "lucide-react";
 import { explorerAddressUrl, formatUsdc } from "@slappay/core";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupLabel, SidebarHeader, SidebarRail, useSidebar } from "@/components/ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -19,9 +19,11 @@ import { ease } from "@/components/motion";
 
 const NAV = [
   { href: "/dashboard", label: "Overview", icon: LayoutGrid },
+  { href: "/card", label: "Card", icon: CreditCard },
   { href: "/mandates", label: "Rules", icon: Lock, kind: "mandate" },
   { href: "/agents", label: "Agents", icon: Bot, kind: "agent" },
   { href: "/streams", label: "Streams", icon: Waves, kind: "stream" },
+  { href: "/tools", label: "Tools", icon: Wrench },
 ] as const;
 
 const spring = { type: "spring", stiffness: 420, damping: 34 } as const;
