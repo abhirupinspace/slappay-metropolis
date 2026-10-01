@@ -16,12 +16,14 @@ export type TxState =
   | { status: "confirmed"; hash: Hash }
   | { status: "error"; message: string; hash?: Hash };
 
-export type TxRequest = {
-  address: `0x${string}`;
-  abi: readonly unknown[];
-  functionName: string;
-  args: readonly unknown[];
-};
+export type TxRequest =
+  | {
+      address: `0x${string}`;
+      abi: readonly unknown[];
+      functionName: string;
+      args: readonly unknown[];
+    }
+  | { to: `0x${string}`; value: bigint };
 
 /** Map raw viem errors to short, user-facing reasons. */
 export function describeTxError(e: unknown): string {
@@ -60,18 +62,25 @@ export function useTx() {
       try {
         for (const step of steps) {
           setState({ status: "preparing" });
-          log("transaction_started", { label, fn: step.functionName });
-          const { request } = await publicClient.simulateContract({
-            ...step,
-            account: walletClient.account,
-            chain: config.chain,
-          } as Parameters<typeof publicClient.simulateContract>[0]);
-          setState({ status: "signing" });
-          const hash = await walletClient.writeContract(request);
+          const fn = "functionName" in step ? step.functionName : "native_transfer";
+          log("transaction_started", { label, fn });
+          let hash: Hash;
+          if ("functionName" in step) {
+            const { request } = await publicClient.simulateContract({
+              ...step,
+              account: walletClient.account,
+              chain: config.chain,
+            } as Parameters<typeof publicClient.simulateContract>[0]);
+            setState({ status: "signing" });
+            hash = await walletClient.writeContract(request);
+          } else {
+            setState({ status: "signing" });
+            hash = await walletClient.sendTransaction({ to: step.to, value: step.value, chain: config.chain, account: walletClient.account });
+          }
           setState({ status: "confirming", hash });
           const receipt = await publicClient.waitForTransactionReceipt({ hash });
           if (receipt.status !== "success") throw new Error("Transaction reverted onchain.");
-          log("transaction_confirmed", { label, fn: step.functionName, hash });
+          log("transaction_confirmed", { label, fn, hash });
           last = hash;
         }
         setState({ status: "confirmed", hash: last! });

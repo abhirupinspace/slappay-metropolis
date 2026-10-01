@@ -18,7 +18,7 @@ export default function Dashboard() {
       animate="show"
       className="grid gap-4 lg:h-[calc(100svh-5.5rem)] lg:min-h-[640px] lg:grid-cols-12 lg:grid-rows-[minmax(0,1fr)_minmax(0,1.05fr)]"
     >
-      <div className="lg:col-span-7"><BalanceCard account={mockAccount} /></div>
+      <div className="lg:col-span-7"><BalanceCard committed={mockAccount.committed} /></div>
       <div className="lg:col-span-5"><RulesCard accounts={mockSmartAccounts} committed={mockAccount.committed} /></div>
       <div className="lg:col-span-4"><SpendingCard {...mockSpendingToday} /></div>
       <div className="lg:col-span-4"><EarningCard {...mockEarning} /></div>
