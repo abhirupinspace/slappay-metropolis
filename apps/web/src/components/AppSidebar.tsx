@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { usePrivy } from "@privy-io/react-auth";
 import { useAccount } from "wagmi";
 import { AnimatePresence, motion } from "motion/react";
-import { Bot, Check, ChevronsUpDown, Copy, CreditCard, ExternalLink, LayoutGrid, Lock, LogIn, LogOut, Sparkles, Waves, Wrench } from "lucide-react";
+import { BarChart3, Bot, Check, ChevronsUpDown, Copy, CreditCard, ExternalLink, LayoutGrid, Lock, LogIn, LogOut, Settings, Sparkles, Waves, Wrench } from "lucide-react";
 import { explorerAddressUrl, formatUsdc } from "@slappay/core";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupLabel, SidebarHeader, SidebarRail, useSidebar } from "@/components/ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -23,6 +23,7 @@ const NAV = [
   { href: "/mandates", label: "Rules", icon: Lock, kind: "mandate" },
   { href: "/agents", label: "Agents", icon: Bot, kind: "agent" },
   { href: "/streams", label: "Streams", icon: Waves, kind: "stream" },
+  { href: "/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/tools", label: "Tools", icon: Wrench },
 ] as const;
 
@@ -68,6 +69,7 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="p-3 group-data-[collapsible=icon]:p-2">
+        <div className={collapsed ? "flex justify-center" : ""}><NavItem href="/settings" label="Settings" icon={Settings} active={path.startsWith("/settings")} collapsed={collapsed} /></div>
         <Account collapsed={collapsed} />
       </SidebarFooter>
       <SidebarRail />
