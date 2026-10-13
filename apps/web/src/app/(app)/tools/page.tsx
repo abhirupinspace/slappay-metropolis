@@ -19,12 +19,12 @@ const BANNERS: Banner[] = [
 ];
 
 const EXPLORE = [
-  { label: "Agent CLI", href: "https://github.com/", ext: true },
+  { label: "Agent CLI", href: "https://github.com/abhirupinspace/slappay-metropolis", ext: true },
   { label: "Paid API demo (x402)", href: "/api/paid/weather", ext: true },
   { label: "Payment links", href: "/dashboard" },
   { label: "Virtual card", href: "/card" },
   { label: "Contract addresses", href: "https://testnet.monadvision.com/address/0x517243E456Cbe561EA34693f68CE58D9B71bA298", ext: true },
-  { label: "Developer docs", href: "https://github.com/", ext: true },
+  { label: "Developer docs", href: "https://github.com/abhirupinspace/slappay-metropolis", ext: true },
   { label: "Agent marketplace", soon: true },
   { label: "Tx history (Envio)", soon: true },
 ];

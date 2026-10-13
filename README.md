@@ -8,7 +8,7 @@ Slappay is a programmable payments app on Monad. You describe what your money sh
 > "Give my research agent $20 per day, max $2 per transaction."
 > "Pay Sarah $20/hour until $2,000."
 
-Built for the Monad Metropolis Hackathon, Consumer Products & Payments track.
+Built for the Monad Metropolis Hackathon, Consumer Products & Payments track. Repo: https://github.com/abhirupinspace/slappay-metropolis
 
 ## Problem
 
